@@ -1,5 +1,6 @@
 package activesupport.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -16,7 +17,9 @@ public class Files {
         java.nio.file.Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                java.nio.file.Files.delete(file);
+                if(java.nio.file.Files.exists(file)){
+                    java.nio.file.Files.delete(file);
+                }
                 return FileVisitResult.CONTINUE;
             }
 
@@ -25,7 +28,9 @@ public class Files {
                 if (exc != null) {
                     throw exc;
                 }
-                java.nio.file.Files.delete(dir);
+                if((new File(dir.toString()).exists())){
+                    java.nio.file.Files.delete(dir);
+                }
                 return FileVisitResult.CONTINUE;
             }
         });
