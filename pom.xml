@@ -18,6 +18,9 @@
     <properties>
         <junit.version>4.12</junit.version>
         <maven.compiler.version>3.7.0</maven.compiler.version>
+        <jansi.version>1.16</jansi.version>
+        <annotations.version>13.0</annotations.version>
+        <commons-io.version>2.5</commons-io.version>
     </properties>
 
     <build>
@@ -54,16 +57,15 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>13.0</version>
+            <version>${annotations.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
         <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
-            <version>1.16</version>
+            <version>${jansi.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>
