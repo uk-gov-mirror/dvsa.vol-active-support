@@ -12,18 +12,21 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class Output {
 
     // TODO: Split into two methods as this method violates command query separation principle
-    public static String prettyPrint(@NotNull String subject){
+    public static String printColoredLog(@NotNull String subject){
 
-        Ansi formattedSubject = ansi()
-                .fg(DEFAULT)
-                .a("[").fg(subjectColor(subject))
-                .a(extractStatementInformationType(subject))
-                .fg(DEFAULT)
-                .a("] " + extractStatementWithoutInformationType(subject));
+        String formattedSubject = colorText("[", DEFAULT)
+                + colorText(extractStatementInformationType(subject), subjectColor(subject))
+                + colorText("]", DEFAULT)
+                + " "
+                + colorText(extractStatementWithoutInformationType(subject), DEFAULT);
 
-        System.out.println(ansi().a(formattedSubject));
+        System.out.println(formattedSubject);
 
-        return formattedSubject.toString();
+        return formattedSubject;
+    }
+
+    public static String colorText(@NotNull String text, @NotNull Ansi.Color color){
+        return ansi().fg(color).a(text).reset().toString();
     }
 
     private static String extractStatementInformationType(@NotNull String subject){
@@ -65,22 +68,5 @@ public class Output {
 
         return color;
     }
-
-//    private static String subjectColor(@NotNull String subject){
-//        subject = subject.toLowerCase();
-//        String color;
-//
-//        if(subject.startsWith("[error]")){
-//            color = "red";
-//        } else if(subject.startsWith("[info]")){
-//            color = "blue";
-//        } else if(subject.startsWith("[pass]")){
-//            color = "green";
-//        } else {
-//            color = "default";
-//        }
-//
-//        return color;
-//    }
 
 }

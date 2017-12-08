@@ -18,7 +18,7 @@ public class Properties {
 
     public static void loadProperties(@NotNull String path) throws FileNotFoundException{
         if(!Files.exists(Paths.get(path))){
-            throw new FileNotFoundException(Output.prettyPrint(String.format("[ERROR] %s does not exist", path.toString())));
+            throw new FileNotFoundException(Output.printColoredLog(String.format("[ERROR] %s does not exist", path.toString())));
         }
 
         java.util.Properties properties = new java.util.Properties();
@@ -29,7 +29,7 @@ public class Properties {
             inputStream.close();
             System.setProperties(properties);
         } catch (IOException e){
-            Output.prettyPrint(String.format("[ERROR] Unable to find or load system properties at %s", path));
+            Output.printColoredLog(String.format("[ERROR] Unable to find or load system properties at %s", path));
         }
     }
 
@@ -52,13 +52,13 @@ public class Properties {
 
                 properties.setProperty(key, value);
 
-                Output.prettyPrint(String.format("[INFO] PROPERTY  SET: %s=%s", key, value));
+                Output.printColoredLog(String.format("[INFO] PROPERTY  SET: %s=%s", key, value));
             }
 
             properties.store(outputStream, null);
         }
 
-        Output.prettyPrint(String.format("[INFO] PROPERTIES STORED: Path to file is %s", path));
+        Output.printColoredLog(String.format("[INFO] PROPERTIES STORED: Path to file is %s", path));
     }
 
 }
