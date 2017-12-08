@@ -2,7 +2,6 @@ package activesupport.system;
 
 import activesupport.system.out.Output;
 import org.jetbrains.annotations.NotNull;
-import sun.security.krb5.internal.PAData;
 
 import java.io.*;
 import java.nio.file.Files;
