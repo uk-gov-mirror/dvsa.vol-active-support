@@ -52,7 +52,7 @@ public class Properties {
         java.util.Properties properties = new java.util.Properties();
 
         (new File(path)).getParentFile().mkdirs();
-        try(OutputStream outputStream = new FileOutputStream(path)) {
+        try(OutputStream outputStream = new FileOutputStream(path, true)) {
 
             for (Map.Entry<String, String> entry : userProperties.entrySet()) {
                 String key = entry.getKey();
