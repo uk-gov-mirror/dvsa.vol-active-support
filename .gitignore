@@ -68,6 +68,6 @@ dvsa-ovl-responsive-tests.iml
 .project
 .settings
 bin/
-out/
+/out/
 ### Artifacts
 target/
