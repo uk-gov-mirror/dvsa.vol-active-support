@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Properties {
+    private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
-    public static void loadDefaultProperties() throws FileNotFoundException{
-        String defaultPropsPath = "properties/default.properties";
-        loadProperties(defaultPropsPath);
+    public static void loadConfigPropertiesFromFile() throws FileNotFoundException{
+        loadProperties(defaultConfigPropertiesPath);
     }
 
     public static void loadProperties(@NotNull String path) throws FileNotFoundException{
@@ -31,6 +31,14 @@ public class Properties {
         } catch (IOException e){
             Output.printColoredLog(String.format("[ERROR] Unable to find or load system properties at %s", path));
         }
+    }
+
+    public static void writeToConfigPropertyFile(@NotNull String key, @NotNull String value) throws IOException {
+        writeProperty(key, value, defaultConfigPropertiesPath);
+    }
+
+    public static void writeToConfigPropertyFile(@NotNull HashMap<String, String> userProperties) throws IOException {
+        writeProperties(userProperties, defaultConfigPropertiesPath);
     }
 
     public static void writeProperty(@NotNull String key, @NotNull String value, @NotNull String path) throws IOException {
