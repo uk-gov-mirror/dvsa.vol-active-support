@@ -17,6 +17,7 @@
 
     <properties>
         <junit.version>4.12</junit.version>
+        <maven.compiler.version>3.7.0</maven.compiler.version>
     </properties>
 
     <build>
@@ -31,6 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -54,6 +56,14 @@
             <artifactId>annotations</artifactId>
             <version>13.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>1.16</version>
+        </dependency>
+
     </dependencies>
 
 </project>
