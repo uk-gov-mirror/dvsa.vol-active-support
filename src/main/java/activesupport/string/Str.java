@@ -1,9 +1,9 @@
 package activesupport.string;
 
+import activesupport.bool.Bool;
 import activesupport.number.Int;
 
 public class Str {
-
 
     public static java.lang.String randomWord(int numberOfCharacters){
         StringBuilder word = new StringBuilder(numberOfCharacters);
@@ -19,10 +19,7 @@ public class Str {
         int lowercaseASCIICode = Int.random(97, 122);
         int uppercaseASCIICode = Int.random(65, 90);
 
-        return generateRandomBoolean() ? (char) uppercaseASCIICode : (char) lowercaseASCIICode;
+        return Bool.random() ? (char) uppercaseASCIICode : (char) lowercaseASCIICode;
     }
 
-    public static boolean generateRandomBoolean(){
-        return (Int.random(0, 1) == 1) ? true : false;
-    }
 }
