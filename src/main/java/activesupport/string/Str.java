@@ -5,7 +5,13 @@ import activesupport.number.Int;
 
 public class Str {
 
-    public static java.lang.String randomWord(int numberOfCharacters){
+    public static String randomWord(int minCharacters, int maxCharacters){
+        int wordLength = Int.random(minCharacters, maxCharacters);
+
+        return randomWord(wordLength);
+    }
+
+    public static String randomWord(int numberOfCharacters){
         StringBuilder word = new StringBuilder(numberOfCharacters);
 
         for(int i = 0; i < numberOfCharacters; i++){
