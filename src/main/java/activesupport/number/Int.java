@@ -2,7 +2,7 @@ package activesupport.number;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Number {
+public class Int {
     /**
      * Returns a number between 1 and the parameter max which is passed in as an argument.
      *
