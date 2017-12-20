@@ -28,7 +28,7 @@ public class S3 {
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         Scanner scanner = new Scanner(s3Object.getObjectContent());
-        return scanner.findWithinHorizon("/[\\w]{11}(?==0A)/", 0);
+        return scanner.findWithinHorizon("/[\\w]{11}(?==0A\\n)/", 0);
     }
 
     private static S3Object getS3Object(String s3BucketName, String s3Path) {
