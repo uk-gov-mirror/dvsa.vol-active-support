@@ -26,6 +26,16 @@ public class S3 {
         return extractTempPasswordFromS3Object(s3Object);
     }
 
+    /**
+     * This extracts the temporary password out out the emails stored in the S3 bucket.
+     * The specific object that the password will be extracted out of if inferred from the emailAddress.
+     * @param emailAddress This is the email address used to create an account on external(self-serve).
+     * */
+    public static String getTempPassword(@NotNull String emailAddress){
+        String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
+        return getTempPassword(emailAddress, s3BucketName);
+    }
+
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         Scanner scanner = new Scanner(s3Object.getObjectContent());
         return scanner.findWithinHorizon("/[\\w]{11}(?==0A\\n)/", 0);
