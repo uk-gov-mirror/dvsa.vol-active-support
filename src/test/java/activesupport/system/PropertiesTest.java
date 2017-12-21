@@ -29,4 +29,17 @@ public class PropertiesTest {
         Files.deleteFolderAndItsContent(Paths.get(pathToProps).getParent());
     }
 
+    @Test
+    public void addsPropertiesToSystemProperties(){
+        // Arrange
+        String expectedProperty = "testProperty";
+        String expectedPropertyValue = "testPropertyValue";
+
+        // Act
+        Properties.set(expectedProperty, expectedPropertyValue);
+
+        // Assert
+        Assert.assertEquals(expectedPropertyValue, System.getProperty(expectedProperty));
+    }
+
 }

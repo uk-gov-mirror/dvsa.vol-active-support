@@ -13,8 +13,9 @@ public class Properties {
     private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
     public static void set(@NotNull String property, @NotNull String value){
-        String message = String.format("[INFO] SET PROPERTY: %s=%s", property, value);
+        String message = String.format("[INFO] PROPERTY SET: %s=%s", property, value);
         System.out.println(Output.printColoredLog(message));
+        System.setProperty(property, value);
     }
 
     /**
