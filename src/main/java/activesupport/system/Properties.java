@@ -12,10 +12,17 @@ import java.util.Map;
 public class Properties {
     private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
+    /**
+     * Adds to system properties the properties specified at properties/config.properties
+     * */
     public static void loadConfigPropertiesFromFile() throws FileNotFoundException{
         loadProperties(defaultConfigPropertiesPath);
     }
 
+    /**
+     * Adds the properties of the property file at the specified path to system properties.
+     * @param path path to a properties file from project root.
+     * */
     public static void loadProperties(@NotNull String path) throws FileNotFoundException{
         if(!Files.exists(Paths.get(path))){
             throw new FileNotFoundException(Output.printColoredLog(String.format("[ERROR] %s does not exist", path.toString())));

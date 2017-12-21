@@ -26,28 +26,4 @@ public class Util {
         return String.format("olcs.%s.nonprod.dvsa.aws/email/%s", env, S3ObjectName);
     }
 
-    /**
-     * Adds to system properties the properties specified at properties/config.properties
-     * */
-    public static void loadConfigProperties(){
-        String pathToProperties = "properties/config.properties";
-        loadProperties(pathToProperties);
-    }
-
-    /**
-     * Adds the properties of the property file at the specified path to system properties.
-     * @param path path to a properties file from project root.
-     * */
-    public static void loadProperties(@NotNull String path){
-        // Adds properties specified in properties/config.properties into system properties
-        if(java.nio.file.Files.exists(Paths.get("properties/config.properties"))) {
-            try {
-                Properties.loadConfigPropertiesFromFile();
-            } catch (FileNotFoundException e) {
-                System.out.println(Output.printColoredLog("[WARNING] PROPERTIES from path: " + path + " not added to system properties"));
-                e.printStackTrace();
-            }
-        }
-    }
-
 }
