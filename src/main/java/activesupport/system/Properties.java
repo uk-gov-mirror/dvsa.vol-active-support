@@ -36,7 +36,7 @@ public class Properties {
             inputStream.close();
             System.setProperties(properties);
         } catch (IOException e){
-            Output.printColoredLog(String.format("[ERROR] Unable to find or load system properties at %s", path));
+            Output.printColoredLog(String.format("[WARNING] Unable to find or load system properties at %s", path));
         }
     }
 
