@@ -1,11 +1,7 @@
 package activesupport.aws.s3.util;
 
-import activesupport.system.Properties;
 import activesupport.system.out.Output;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 
 public class Util {
 
