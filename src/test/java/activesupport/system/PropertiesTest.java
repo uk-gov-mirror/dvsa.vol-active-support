@@ -42,4 +42,18 @@ public class PropertiesTest {
         Assert.assertEquals(expectedPropertyValue, System.getProperty(expectedProperty));
     }
 
+    @Test
+    public void retrievesPropertyValuesFromSystemProperties(){
+        // Arrange
+        String expectedProperty = "testProperty";
+        String expectedPropertyValue = "testPropertyValue";
+        Properties.set(expectedProperty, expectedPropertyValue);
+
+        // Act
+        String actualPropertyValue = Properties.get(expectedProperty);
+
+        // Assert
+        Assert.assertEquals(expectedPropertyValue, actualPropertyValue);
+    }
+
 }
