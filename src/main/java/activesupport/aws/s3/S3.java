@@ -69,11 +69,11 @@ public class S3 {
     }
 
     private static boolean hasAWSAccessKeyIDENV(){
-        return !getAWSAccessKeyID().isEmpty();
+        return getAWSAccessKeyID() != null;
     }
 
     private static boolean hasAWSSecretAccessKeyENV(){
-        return !getAWSSecretAccessKey().isEmpty();
+        return getAWSSecretAccessKey() != null;
     }
 
     private static String getAWSAccessKeyID() {
