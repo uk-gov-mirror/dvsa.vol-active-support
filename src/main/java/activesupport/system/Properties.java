@@ -12,6 +12,11 @@ import java.util.Map;
 public class Properties {
     private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
+    public static void set(@NotNull String property, @NotNull String value){
+        String message = String.format("[INFO] SET PROPERTY: %s=%s", property, value);
+        System.out.println(Output.printColoredLog(message));
+    }
+
     /**
      * Adds to system properties the properties specified at properties/config.properties
      * */
