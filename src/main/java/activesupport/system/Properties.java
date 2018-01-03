@@ -21,7 +21,7 @@ public class Properties {
     public static String get(@NotNull String property){
         String propValue = System.getProperty(property);
         String message = String.format("[INFO] PROPERTY RETRIEVED: %s=%s", property, propValue);
-        System.out.println(Output.printColoredLog(message));
+        Output.printColoredLog(message);
         return propValue;
     }
 
