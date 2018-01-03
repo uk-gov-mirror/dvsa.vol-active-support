@@ -14,7 +14,7 @@ public class Properties {
 
     public static void set(@NotNull String property, @NotNull String value){
         String message = String.format("[INFO] PROPERTY SET: %s=%s", property, value);
-        System.out.println(Output.printColoredLog(message));
+        Output.printColoredLog(message);
         System.setProperty(property, value);
     }
 

@@ -6,7 +6,7 @@
 
     <groupId>org.dvsa.testing.lib</groupId>
     <artifactId>active-support</artifactId>
-    <version>0.8.02</version>
+    <version>0.8.03</version>
 
     <distributionManagement>
         <repository>
