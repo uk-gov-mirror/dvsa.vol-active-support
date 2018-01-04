@@ -11,6 +11,8 @@ import com.amazonaws.services.s3.model.S3Object;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class S3 {
     /**
@@ -37,8 +39,13 @@ public class S3 {
     }
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
-        Scanner scanner = new Scanner(s3Object.getObjectContent());
-        return scanner.findWithinHorizon("/[\\w]{11}(?==0A\\n)/", 0);
+        String s3ObjContents = new Scanner(s3Object.getObjectContent()).useDelimiter("\\A").next();
+        Pattern pattern = Pattern.compile("[\\w]{6,20}(?==0ASign in at)");
+        Matcher matcher = pattern.matcher(s3ObjContents);
+        matcher.find();
+        String tempPassword = matcher.group();
+        return tempPassword;
+
     }
 
     private static S3Object getS3Object(String s3BucketName, String s3Path) {
@@ -77,10 +84,10 @@ public class S3 {
     }
 
     private static String getAWSAccessKeyID() {
-        return System.getProperty("AWS_ACCESS_KEY_ID");
+        return System.getenv("AWS_ACCESS_KEY_ID");
     }
 
     private static String getAWSSecretAccessKey() {
-        return System.getProperty("AWS_SECRET_ACCESS_KEY");
+        return System.getenv("AWS_SECRET_ACCESS_KEY");
     }
 }
