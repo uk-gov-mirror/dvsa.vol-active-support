@@ -25,6 +25,11 @@ public class Properties {
         return propValue;
     }
 
+    public static boolean has(@NotNull String property){
+        String propValue = Properties.get(property);
+        return propValue != null && !propValue.isEmpty();
+    }
+
     /**
      * Adds to system properties the properties specified at properties/config.properties
      * */
