@@ -27,7 +27,7 @@ public class URLTest {
     @Test
     public void extractsDomain(){
         String testURL = "https://example.com";
-        String expectedDomain = "example.com";
+        String expectedDomain = "example.com/";
         String actualDomain = URL.extractDomain(testURL);
 
         Assert.assertEquals(expectedDomain, actualDomain);
