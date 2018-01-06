@@ -2,6 +2,10 @@ package activesupport.string;
 
 import activesupport.bool.Bool;
 import activesupport.number.Int;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Str {
 
@@ -26,6 +30,13 @@ public class Str {
         int uppercaseASCIICode = Int.random(65, 90);
 
         return Bool.random() ? (char) uppercaseASCIICode : (char) lowercaseASCIICode;
+    }
+
+    public static String find(@NotNull String regex, @NotNull String subject){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(subject);
+        matcher.find();
+        return matcher.group();
     }
 
 }
