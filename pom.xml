@@ -8,6 +8,13 @@
     <artifactId>active-support</artifactId>
     <version>0.8.2</version>
 
+    <repositories>
+        <repository>
+            <id>devappci-shd-pri-qarepo</id>
+            <url>s3://devappci-shd-pri-qarepo</url>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <repository>
             <id>devappci-shd-pri-qarepo</id>
