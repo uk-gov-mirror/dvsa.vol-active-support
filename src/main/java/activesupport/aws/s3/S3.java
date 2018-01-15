@@ -1,6 +1,7 @@
 package activesupport.aws.s3;
 
 import activesupport.aws.s3.util.Util;
+import activesupport.string.Str;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
@@ -15,13 +16,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class S3 {
+    private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
+
+    public static String getNIGVExport(@NotNull String S3ObjectName) throws IllegalAccessException {
+        String S3Path = Util.s3Path(S3ObjectName, FolderType.NI_EXPORT);
+        S3Object s3Object = S3.getS3Object(s3BucketName, S3Path);
+        return objectContents(s3Object);
+    }
+
+    public static String objectContents(@NotNull S3Object s3Object){
+        return Str.inputStreamContents(s3Object.getObjectContent());
+    }
+
     /**
      * This extracts the temporary password out out the emails stored in the S3 bucket.
      * The specific object that the password will be extracted out of if inferred from the emailAddress.
      * @param emailAddress This is the email address used to create an account on external(self-serve).
      * @param S3BucketName This is the name of the S3 bucket.
      * */
-    public static String getTempPassword(@NotNull String emailAddress, @NotNull String S3BucketName){
+    public static String getTempPassword(@NotNull String emailAddress, @NotNull String S3BucketName) throws IllegalAccessException {
         String S3ObjectName = Util.s3TempPasswordObjectName(emailAddress);
         String S3Path = Util.s3Path(S3ObjectName);
         S3Object s3Object = S3.getS3Object(S3BucketName, S3Path);
@@ -33,10 +46,12 @@ public class S3 {
      * The specific object that the password will be extracted out of if inferred from the emailAddress.
      * @param emailAddress This is the email address used to create an account on external(self-serve).
      * */
-    public static String getTempPassword(@NotNull String emailAddress){
-        String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
+    public static String getTempPassword(@NotNull String emailAddress) throws IllegalAccessException {
+        String s3BucketName = "devapp-olcs-pri-olcs-autotest-s";
         return getTempPassword(emailAddress, s3BucketName);
     }
+
+
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         String s3ObjContents = new Scanner(s3Object.getObjectContent()).useDelimiter("\\A").next();

@@ -4,6 +4,8 @@ import activesupport.bool.Bool;
 import activesupport.number.Int;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,10 @@ public class Str {
         Matcher matcher = pattern.matcher(subject);
         matcher.find();
         return matcher.group();
+    }
+
+    public static String inputStreamContents(@NotNull InputStream inputStream ){
+        return new Scanner(inputStream).useDelimiter("\\A").next();
     }
 
 }
