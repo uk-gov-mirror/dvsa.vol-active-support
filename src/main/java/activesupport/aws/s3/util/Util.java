@@ -16,9 +16,7 @@ public class Util {
         return s3Path(S3ObjectName, folderType);
     }
 
-
-
-    public static String s3Path(@NotNull String S3ObjectName, @NotNull FolderType folderType) throws IllegalAccessException {
+    public static String s3Directory(@NotNull FolderType folderType) throws IllegalAccessException {
         String env = System.getProperty("env");
 
         if(env.isEmpty()){
@@ -27,7 +25,11 @@ public class Util {
             );
         }
 
-        return String.format("olcs.%s.nonprod.dvsa.aws/%s/%s", env, folderTypeName(folderType), S3ObjectName);
+        return String.format("olcs.%s.nonprod.dvsa.aws/%s/", env, folderTypeName(folderType));
+    }
+
+    public static String s3Path(@NotNull String S3ObjectName, @NotNull FolderType folderType) throws IllegalAccessException {
+        return s3Directory(folderType) + S3ObjectName;
     }
 
     private static String folderTypeName(@NotNull FolderType folderType) throws IllegalAccessException {
@@ -46,6 +48,5 @@ public class Util {
 
         return folderTypeName;
     }
-
 
 }
