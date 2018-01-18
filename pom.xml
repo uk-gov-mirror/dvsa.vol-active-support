@@ -104,6 +104,5 @@
             <artifactId>ant</artifactId>
             <version>${ant.version}</version>
         </dependency>
-
     </dependencies>
 </project>
