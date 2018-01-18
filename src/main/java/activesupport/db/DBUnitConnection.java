@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.time.Instant;
-
 import activesupport.system.Properties;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
@@ -69,10 +68,6 @@ import static org.dbunit.Assertion.assertEquals;
         public static void writeToXml(IDataSet dataSet, String fileName) {
             try {
                 FlatXmlDataSet.write(dataSet, new FileOutputStream(createFolder() + "/" + fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (DataSetException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -81,10 +76,6 @@ import static org.dbunit.Assertion.assertEquals;
         public static void writeToCsv(IDataSet dataSet) {
             try {
                 CsvDataSetWriter.write(dataSet, createFolder());
-            } catch (DataSetException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }

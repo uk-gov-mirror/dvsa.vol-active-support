@@ -24,7 +24,6 @@ public class S3 {
     private static AmazonS3 s3;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
 
-
     public static String getNIGVExport(@NotNull String S3ObjectName) throws IllegalAccessException {
         String S3Path = Util.s3Path(S3ObjectName, FolderType.NI_EXPORT);
         S3Object s3Object = S3.getS3Object(s3BucketName, S3Path);
@@ -34,7 +33,6 @@ public class S3 {
     public static String objectContents(@NotNull S3Object s3Object) {
         return Str.inputStreamContents(s3Object.getObjectContent());
     }
-
 
     public static List<String> getlistFiles(String s3BucketName, String s3Path) {
         s3 = createS3Client();
@@ -77,7 +75,6 @@ public class S3 {
         String s3BucketName = "devapp-olcs-pri-olcs-autotest-s";
         return getTempPassword(emailAddress, s3BucketName);
     }
-
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         String s3ObjContents = new Scanner(s3Object.getObjectContent()).useDelimiter("\\A").next();
