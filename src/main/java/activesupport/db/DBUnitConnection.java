@@ -20,8 +20,6 @@ import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import static org.dbunit.Assertion.assertEquals;
 
-
-
     public class DBUnitConnection {
         private static QueryDataSet dataSet;
         private final static String env = Properties.get("env");
@@ -65,7 +63,7 @@ import static org.dbunit.Assertion.assertEquals;
             return loadedDataSet;
         }
 
-        public static void writeToXml(IDataSet dataSet, String fileName) {
+        public static void writeToXML(IDataSet dataSet, String fileName) {
             try {
                 FlatXmlDataSet.write(dataSet, new FileOutputStream(createFolder() + "/" + fileName));
             } catch (Exception e) {
@@ -73,7 +71,7 @@ import static org.dbunit.Assertion.assertEquals;
             }
         }
 
-        public static void writeToCsv(IDataSet dataSet) {
+        public static void writeToCSV(IDataSet dataSet) {
             try {
                 CsvDataSetWriter.write(dataSet, createFolder());
             } catch (Exception e) {
