@@ -2,19 +2,14 @@ package activesupport.aws.s3;
 
 import activesupport.aws.s3.util.Util;
 import activesupport.string.Str;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -23,6 +18,7 @@ import java.util.regex.Pattern;
 public class S3 {
     private static AmazonS3 s3;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
+
 
     public static String getNIGVExport(@NotNull String S3ObjectName) throws IllegalAccessException {
         String S3Path = Util.s3Path(S3ObjectName, FolderType.NI_EXPORT);
@@ -72,7 +68,6 @@ public class S3 {
      * @param emailAddress This is the email address used to create an account on external(self-serve).
      */
     public static String getTempPassword(@NotNull String emailAddress) throws IllegalAccessException {
-        String s3BucketName = "devapp-olcs-pri-olcs-autotest-s";
         return getTempPassword(emailAddress, s3BucketName);
     }
 
