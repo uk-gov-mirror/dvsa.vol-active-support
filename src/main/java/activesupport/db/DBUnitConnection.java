@@ -77,15 +77,18 @@ import static org.dbunit.Assertion.assertEquals;
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
         public boolean compareDataSets(IDataSet dataSet, IDataSet dataSet1){
+            boolean matched = true;
             try {
                 assertEquals(dataSet,dataSet1);
             } catch (DatabaseUnitException e) {
                 e.printStackTrace();
+               matched= false;
             }
-            return true;
+            return matched;
         }
     }
 
