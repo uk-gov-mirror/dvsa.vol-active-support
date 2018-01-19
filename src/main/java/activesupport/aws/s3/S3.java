@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
 
-public class S3 {
+public class S3 extends AWSCredentialsProviderChain {
     private static AmazonS3 s3;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
 
@@ -29,7 +30,7 @@ public class S3 {
         return Str.inputStreamContents(s3Object.getObjectContent());
     }
 
-    public static List<String> getlistFiles(String s3BucketName, String s3Path) {
+    public static ObjectListing getlistFiles(String s3BucketName, String s3Path) {
         s3 = createS3Client();
         ObjectListing objects = s3.listObjects(s3BucketName, s3Path);
         do {
@@ -40,7 +41,7 @@ public class S3 {
             }
             objects = s3.listNextBatchOfObjects(objects);
         } while (objects.isTruncated());
-        return (List<String>) objects;
+        return  objects;
     }
 
     /**
@@ -81,41 +82,10 @@ public class S3 {
         return createS3Client().getObject(new GetObjectRequest(s3BucketName, s3Path));
     }
 
-    private static AmazonS3 createS3Client() {
-        boolean refreshCredentialsAsync = false;
-        return createS3Client(refreshCredentialsAsync);
-    }
-
-    private static AmazonS3 createS3Client(boolean refreshCredentialsAsync) {
+    private static AmazonS3 createS3Client()  {
         String region = "eu-west-1";
-
-        if (S3.hasAWSAccessKeyIDENV() && S3.hasAWSSecretAccessKeyENV()) {
-            s3 = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(getAWSAccessKeyID(), getAWSSecretAccessKey())))
-                    .withRegion(region)
-                    .build();
-        } else {
-            s3 = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new InstanceProfileCredentialsProvider(refreshCredentialsAsync))
-                    .withRegion(region).build();
-        }
+        s3 = AmazonS3ClientBuilder.standard().withRegion(region).build();
 
         return s3;
-    }
-
-    private static boolean hasAWSAccessKeyIDENV() {
-        return getAWSAccessKeyID() != null;
-    }
-
-    private static boolean hasAWSSecretAccessKeyENV() {
-        return getAWSSecretAccessKey() != null;
-    }
-
-    private static String getAWSAccessKeyID() {
-        return System.getenv("AWS_ACCESS_KEY_ID");
-    }
-
-    private static String getAWSSecretAccessKey() {
-        return System.getenv("AWS_SECRET_ACCESS_KEY");
     }
 }
