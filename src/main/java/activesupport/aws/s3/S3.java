@@ -19,7 +19,6 @@ public class S3 {
     private static AmazonS3 s3;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
 
-
     public static String getNIGVExport(@NotNull String S3ObjectName) throws IllegalAccessException {
         String S3Path = Util.s3Path(S3ObjectName, FolderType.NI_EXPORT);
         S3Object s3Object = S3.getS3Object(s3BucketName, S3Path);
@@ -34,16 +33,13 @@ public class S3 {
         s3 = createS3Client();
         ObjectListing objects = s3.listObjects(s3BucketName, s3Path);
         do {
-
             for (S3ObjectSummary objectSummary : objects.getObjectSummaries()) {
                 System.out.println(objectSummary.getKey() + "\t" +
                         objectSummary.getSize() + "\t" +
                         StringUtils.fromDate(objectSummary.getLastModified()));
             }
             objects = s3.listNextBatchOfObjects(objects);
-
         } while (objects.isTruncated());
-
         return (List<String>) objects;
     }
 
