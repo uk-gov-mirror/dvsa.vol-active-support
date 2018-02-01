@@ -65,4 +65,12 @@ public class Files {
             outputStream.write(strToBytes);
         }
     }
+
+    public static void delete(@NotNull String file) {
+        Path path = Paths.get(file);
+
+        if (path.toFile().exists()) {
+            path.toFile().delete();
+        }
+    }
 }
