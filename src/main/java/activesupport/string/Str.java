@@ -4,10 +4,16 @@ import activesupport.bool.Bool;
 import activesupport.number.Int;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Str {
+
+    public static String inputStreamContents(@NotNull InputStream inputStream ){
+        return new Scanner(inputStream).useDelimiter("\\A").next();
+    }
 
     public static String randomWord(int minCharacters, int maxCharacters){
         int wordLength = Int.random(minCharacters, maxCharacters);
