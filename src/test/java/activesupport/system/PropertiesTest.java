@@ -1,5 +1,6 @@
 package activesupport.system;
 
+import activesupport.MissingRequiredArgument;
 import activesupport.file.Files;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void retrievesPropertyValuesFromSystemProperties(){
+    public void retrievesPropertyValuesFromSystemProperties() throws MissingRequiredArgument {
         // Arrange
         String expectedProperty = "testProperty";
         String expectedPropertyValue = "testPropertyValue";

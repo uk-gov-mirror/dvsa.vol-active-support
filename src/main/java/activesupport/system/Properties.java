@@ -1,5 +1,6 @@
 package activesupport.system;
 
+import activesupport.MissingRequiredArgument;
 import activesupport.system.out.Output;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,14 +19,30 @@ public class Properties {
         System.setProperty(property, value);
     }
 
-    public static String get(@NotNull String property){
-        String propValue = System.getProperty(property);
+    public static String get(@NotNull String property) throws MissingRequiredArgument {
+        boolean required = false;
+        return get(property, required);
+    }
+
+    public static String get(@NotNull String property, boolean required) throws MissingRequiredArgument {
+        String propValue = null;
+
+        if (System.getenv(property) != null) {
+            propValue = System.getenv(property);
+        } else if (System.getProperty(property) != null) {
+            propValue = System.getProperty(property);
+        }
+
+        if (required && propValue == null) {
+            throw new MissingRequiredArgument("[ERROR] " + property + " is required and must be set either at runtime or as a system variable");
+        }
+
         String message = String.format("[INFO] PROPERTY RETRIEVED: %s=%s", property, propValue);
         Output.printColoredLog(message);
         return propValue;
     }
 
-    public static boolean has(@NotNull String property){
+    public static boolean has(@NotNull String property) throws MissingRequiredArgument {
         String propValue = Properties.get(property);
         return propValue != null && !propValue.isEmpty();
     }
