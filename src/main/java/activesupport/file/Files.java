@@ -1,9 +1,11 @@
 package activesupport.file;
 
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.*;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
@@ -34,5 +36,33 @@ public class Files {
                 return FileVisitResult.CONTINUE;
             }
         });
+    }
+
+    public static File createDirectory(@NotNull String path) {
+        return createFolder(path);
+    }
+
+    public static File createFolder(@NotNull String path) {
+        File folder = new File(path);
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        return folder;
+    }
+
+    public static void write(@NotNull Path path, @NotNull String contents) throws IOException {
+        File file = path.toFile();
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+
+        try(FileOutputStream outputStream = new FileOutputStream(file)){
+            byte[] strToBytes = contents.getBytes();
+            outputStream.write(strToBytes);
+        }
     }
 }
