@@ -52,6 +52,10 @@ public class Files {
         return folder;
     }
 
+    public static void write(@NotNull String path, @NotNull String contents) throws IOException {
+        Files.write(Paths.get(path), contents);
+    }
+
     public static void write(@NotNull Path path, @NotNull String contents) throws IOException {
         File file = path.toFile();
 
