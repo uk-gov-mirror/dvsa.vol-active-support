@@ -1,12 +1,14 @@
 package activesupport.jenkins;
 
 import activesupport.jenkins.exceptions.JenkinsBuildFailed;
-import activesupport.MissingRequiredArgument;
 import activesupport.system.Properties;
 import activesupport.system.out.Output;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.helper.Range;
-import com.offbytwo.jenkins.model.*;
+import com.offbytwo.jenkins.model.Build;
+import com.offbytwo.jenkins.model.BuildResult;
+import com.offbytwo.jenkins.model.BuildWithDetails;
+import com.offbytwo.jenkins.model.JobWithDetails;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
@@ -32,8 +34,8 @@ public class Jenkins {
     }
 
     public static void trigger(@NotNull Job job, @NotNull HashMap<String, String> params) throws Exception {
-        String username = Jenkins.username();
-        String password = Jenkins.password();
+        String username = Properties.get("JENKINS_USERNAME", true);
+        String password = Properties.get("JENKINS_PASSWORD", true);
 
         JenkinsServer batchProcessJobs = new JenkinsServer(new URI("http://olcsci.shd.ci.nonprod.dvsa.aws:8080/"), username, password);
         batchProcessJobs.enableJob(job.toString());
@@ -57,25 +59,4 @@ public class Jenkins {
         }
     }
 
-    public static String username() throws MissingRequiredArgument {
-        if (Properties.get("JENKINS_USERNAME") != null) {
-            return Properties.get("JENKINS_USERNAME");
-        } else {
-            throw new MissingRequiredArgument("[ERROR] JENKINS_USERNAME should be passed in during runtime "
-                    + "or should be specified in your system variables. This variable should hold the value of "
-                    + "you Jenkins username"
-            );
-        }
-    }
-
-    private static String password() throws MissingRequiredArgument {
-        if (Properties.get("JENKINS_PASSWORD") != null) {
-            return Properties.get("JENKINS_PASSWORD");
-        } else {
-            throw new MissingRequiredArgument("[ERROR] JENKINS_PASSWORD should be passed in during runtime "
-                    + "or should be specified in your system variables. This variable should hold the value of "
-                    + "you Jenkins password"
-            );
-        }
-    }
 }
