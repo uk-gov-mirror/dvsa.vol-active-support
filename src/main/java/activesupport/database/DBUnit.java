@@ -39,7 +39,7 @@ public class DBUnit {
         Class.forName(driver.toString()).newInstance();
 
         Connection dbConnection = DriverManager.getConnection(String.format(
-                "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/?user=%s&password=%s",
+                "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/?user=%s&password=%s&useSSL=false",
                 Properties.get("env"),
                 loadDBCredential(DatabaseCredentialType.USERNAME),
                 loadDBCredential(DatabaseCredentialType.PASSWORD))
