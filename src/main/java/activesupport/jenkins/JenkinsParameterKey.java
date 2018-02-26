@@ -2,14 +2,15 @@ package activesupport.jenkins;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum Param {
+public enum JenkinsParameterKeys {
     JOB("INCLUDE_TYPES"),
     NODE("Run on Nodes"),
-    REPORT("REPORT_NAME");
+    REPORT("REPORT_NAME"),
+    COMMAND("COMMAND");
 
     String name;
 
-    Param(@NotNull String name) {
+    JenkinsParameterKeys(@NotNull String name) {
         this.name = name;
     }
 
