@@ -2,7 +2,7 @@ package activesupport.jenkins;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum JenkinsParameterKeys {
+public enum JenkinsParameterKey {
     JOB("INCLUDE_TYPES"),
     NODE("Run on Nodes"),
     REPORT("REPORT_NAME"),
@@ -10,7 +10,7 @@ public enum JenkinsParameterKeys {
 
     String name;
 
-    JenkinsParameterKeys(@NotNull String name) {
+    JenkinsParameterKey(@NotNull String name) {
         this.name = name;
     }
 
