@@ -19,7 +19,8 @@ public class Jenkins {
 
     public enum Job {
         NI_EXPORT("Batch_data-gov-NI-export"),
-        BATCH_PROCESS_QUEQUE("Batch_Process_Queue");
+        BATCH_PROCESS_QUEQUE("Batch_Process_Queue"),
+        BATCH_RUN_CLI("Batch_Run_Cli");
 
         private final String name;
 
