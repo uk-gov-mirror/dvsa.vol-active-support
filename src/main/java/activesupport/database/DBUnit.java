@@ -20,6 +20,7 @@ import org.dbunit.util.fileloader.CsvDataFileLoader;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,8 +28,8 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import static activesupport.file.Files.createFolder;
 
+import static activesupport.file.Files.createFolder;
 
 public class DBUnit {
     private static IDatabaseConnection dbUnitConnection;
