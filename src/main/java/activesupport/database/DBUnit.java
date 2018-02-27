@@ -3,6 +3,7 @@ package activesupport.database;
 import activesupport.MissingRequiredArgument;
 import activesupport.database.credential.DatabaseCredentialType;
 import activesupport.system.Properties;
+import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -19,7 +20,6 @@ import org.dbunit.util.fileloader.CsvDataFileLoader;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,14 +27,10 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import static activesupport.file.Files.createFolder;
-import static org.dbunit.Assertion.assertEquals;
 
 
 public class DBUnit {
-
-
     private static IDatabaseConnection dbUnitConnection;
     private static IDataSet dataSet;
 
@@ -89,7 +85,7 @@ public class DBUnit {
         boolean equals = true;
 
         try {
-            assertEquals(dataSet.getTable(table), dataSet1.getTable(table));
+            Assertion.assertEquals(dataSet.getTable(table), dataSet1.getTable(table));
         } catch (DatabaseUnitException e) {
             equals = false;
         }
@@ -97,12 +93,11 @@ public class DBUnit {
         return equals;
     }
 
-
     private static String loadDBCredential(@NotNull DatabaseCredentialType databaseCredentialType) throws MissingRequiredArgument {
         return Properties.get(databaseCredentialType.toString(), true);
     }
 
-    private static String getDiffBetweenTables(@NotNull ITable expectedTable, ITable actualTable) throws DataSetException {
+    private static String getDiffBetweenTables(@NotNull ITable expectedTable, @NotNull ITable actualTable) throws DataSetException {
         TableFormatter tableFormatter = new TableFormatter();
         String newline = System.getProperty("line.separator");
         StringBuilder differences = new StringBuilder();
@@ -133,14 +128,12 @@ public class DBUnit {
         return dataSet;
     }
 
-    public static void equalsAssert(IDataSet expectedDataSet, IDataSet actualDataSet, @NotNull String table) throws Exception {
+    public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
         try {
-            assertEquals(expectedDataSet.getTable(table), expectedDataSet.getTable(table));
+            Assertion.assertEquals(expectedDataSet.getTable(table), expectedDataSet.getTable(table));
         } catch (AssertionError e) {
             throw new DatabaseUnitException(getDiffBetweenTables(expectedDataSet.getTable(table), expectedDataSet.getTable(table)), e);
         }
     }
 }
-
-
 
