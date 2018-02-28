@@ -53,7 +53,6 @@ public class DBUnit {
     }
 
     public static IDataSet queryDatabase(@NotNull String query, @NotNull String fileName) throws Exception {
-
         QueryDataSet dataSet;
 
         dbUnitConnection = new DatabaseConnection(JDBConnection(Driver.MYSQL));
