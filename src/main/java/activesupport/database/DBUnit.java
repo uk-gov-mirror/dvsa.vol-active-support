@@ -2,6 +2,7 @@ package activesupport.database;
 
 import activesupport.MissingRequiredArgument;
 import activesupport.database.credential.DatabaseCredentialType;
+import activesupport.database.exception.UnsupportedDatabaseDriverException;
 import activesupport.system.Properties;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -19,6 +20,7 @@ import org.dbunit.util.TableFormatter;
 import org.dbunit.util.fileloader.CsvDataFileLoader;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
+import org.dbunit.util.search.SearchException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,21 +35,50 @@ import static activesupport.file.Files.createFolder;
 
 public class DBUnit {
     private static IDatabaseConnection dbUnitConnection;
-    private static IDataSet dataSet;
+
+    public static IDatabaseConnection getDBUnitConnection() throws UnsupportedDatabaseDriverException {
+        return getDBUnitConnection(Driver.MYSQL);
+    }
+
+    public static IDatabaseConnection getDBUnitConnection(@NotNull Driver driver) throws UnsupportedDatabaseDriverException {
+        if (dbUnitConnection == null) {
+            try {
+                dbUnitConnection = new DatabaseConnection(JDBConnection(driver));
+            } catch (DatabaseUnitException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return dbUnitConnection;
+    }
 
     public static IDataSet readCSV(@NotNull File file) throws DataSetException, MalformedURLException {
         return new CsvURLDataSet(file.toURI().toURL());
     }
 
-    public static Connection JDBConnection(@NotNull Driver driver) throws Exception {
-        Class.forName(driver.toString()).newInstance();
+    public static Connection JDBConnection(@NotNull Driver driver) throws UnsupportedDatabaseDriverException {
+        try {
+            Class.forName(driver.toString()).newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+           throw new UnsupportedDatabaseDriverException();
+        }
 
-        Connection dbConnection = DriverManager.getConnection(String.format(
-                "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/?user=%s&password=%s&useSSL=false",
-                Properties.get("env"),
-                loadDBCredential(DatabaseCredentialType.USERNAME),
-                loadDBCredential(DatabaseCredentialType.PASSWORD))
-        );
+        Connection dbConnection = null;
+
+        try {
+            dbConnection = DriverManager.getConnection(String.format(
+                    "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/?user=%s&password=%s&useSSL=false",
+                    Properties.get("env"),
+                    loadDBCredential(DatabaseCredentialType.USERNAME),
+                    loadDBCredential(DatabaseCredentialType.PASSWORD))
+            );
+        } catch (MissingRequiredArgument | SQLException e) {
+            e.printStackTrace();
+        }
 
         return dbConnection;
     }
@@ -55,8 +86,7 @@ public class DBUnit {
     public static IDataSet queryDatabase(@NotNull String query, @NotNull String fileName) throws Exception {
         QueryDataSet dataSet;
 
-        dbUnitConnection = new DatabaseConnection(JDBConnection(Driver.MYSQL));
-        dataSet = new QueryDataSet(dbUnitConnection);
+        dataSet = new QueryDataSet(getDBUnitConnection());
         dataSet.addTable(fileName, query);
         return dataSet;
     }
@@ -110,22 +140,18 @@ public class DBUnit {
     }
 
     public static IDataSet exportFullDataSet() throws Exception {
-        dbUnitConnection = new DatabaseConnection(JDBConnection(Driver.MYSQL));
-        dataSet = dbUnitConnection.createDataSet();
-        return dataSet;
+        return getDBUnitConnection().createDataSet();
     }
 
     // dependent tables database export: export table X and all tables that
     // have a PK which is a FK on X, in the right order for insertion
-    public static IDataSet dependentTableExport(@NotNull String rootTableName) throws Exception {
-        try {
-            String[] depTableNames =
-                    TablesDependencyHelper.getAllDependentTables(dbUnitConnection, rootTableName);
-            dataSet = dbUnitConnection.createDataSet(depTableNames);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataSet;
+    public static IDataSet dependantTableExport(@NotNull String rootTableName) throws Exception {
+        String[] depTableNames = dependantTables(rootTableName);
+        return getDBUnitConnection().createDataSet(depTableNames);
+    }
+
+    public static String[] dependantTables(@NotNull String rootTable) throws UnsupportedDatabaseDriverException, SearchException {
+        return TablesDependencyHelper.getAllDependentTables(getDBUnitConnection(), rootTable);
     }
 
     public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
