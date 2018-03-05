@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Set;
 
 import static activesupport.file.Files.createFolder;
 
@@ -146,12 +147,12 @@ public class DBUnit {
     // dependent tables database export: export table X and all tables that
     // have a PK which is a FK on X, in the right order for insertion
     public static IDataSet dependantTableExport(@NotNull String rootTableName) throws Exception {
-        String[] depTableNames = dependantTables(rootTableName);
+        String[] depTableNames = (String[]) dependantTables(rootTableName).toArray();
         return getDBUnitConnection().createDataSet(depTableNames);
     }
 
-    public static String[] dependantTables(@NotNull String rootTable) throws UnsupportedDatabaseDriverException, SearchException {
-        return TablesDependencyHelper.getAllDependentTables(getDBUnitConnection(), rootTable);
+    public static Set dependantTables(@NotNull String rootTable) throws UnsupportedDatabaseDriverException, SearchException {
+        return TablesDependencyHelper.getDirectDependsOnTables(getDBUnitConnection(), rootTable);
     }
 
     public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
