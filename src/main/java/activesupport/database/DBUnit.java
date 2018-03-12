@@ -168,11 +168,6 @@ public class DBUnit {
         return tables;
     }
 
-    public static void main(String[] args) throws SearchException, UnsupportedDatabaseDriverException {
-        Set dependentTables = DBUnit.dependentTables("organisation", Integer.MAX_VALUE);
-        System.out.println("YAY");
-    }
-
     public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
         try {
             Assertion.assertEquals(expectedDataSet.getTable(table), expectedDataSet.getTable(table));
