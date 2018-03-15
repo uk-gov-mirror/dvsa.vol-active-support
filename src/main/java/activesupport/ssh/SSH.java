@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class SSH {
 
-    public static Session openTunnel(@NotNull String sshUser, @NotNull String dbamIP, @NotNull String sshPrivateKey) throws Exception {
+    public static Session openTunnel(@NotNull String sshUser, @NotNull String remoteHost, @NotNull String sshPrivateKeyPath) throws Exception {
         // Create SSH session.  Port 22 is your SSH port which
         // is open in your firewall setup.
         java.util.Properties config = new java.util.Properties();
         config.put("StrictHostKeyChecking", "no");
 
         JSch jsch = new JSch();
-        jsch.addIdentity(sshPrivateKey);
+        jsch.addIdentity(sshPrivateKeyPath);
 
-        Session session = jsch.getSession(sshUser, dbamIP, 22);
+        Session session = jsch.getSession(sshUser, remoteHost, 22);
         // Additional SSH options.  See your ssh_config manual for
         // more options.  Set options according to your requirements.
         session.setConfig(config);
@@ -24,10 +24,10 @@ public class SSH {
         return session;
     }
 
-    public static int portForwarding(@NotNull int dbamPort, @NotNull String remoteHost, @NotNull int remotePort, @NotNull Session session) throws Exception {
-        int assignedPort = session.setPortForwardingL(dbamPort, remoteHost, remotePort);
+    public static int portForwarding(@NotNull int listeningPort, @NotNull String destinationHost, @NotNull int destinationPort, @NotNull Session session) throws Exception {
+        int assignedPort = session.setPortForwardingL(listeningPort, destinationHost, destinationPort);
         if (assignedPort == 0) {
-            System.out.println("Port forwarding failed !");
+            System.err.println("Port forwarding failed !");
         }
         return assignedPort;
     }
