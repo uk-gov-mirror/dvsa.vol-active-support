@@ -9,6 +9,7 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
+import org.dbunit.database.search.ExportedKeysSearchCallback;
 import org.dbunit.database.search.TablesDependencyHelper;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -20,8 +21,11 @@ import org.dbunit.util.TableFormatter;
 import org.dbunit.util.fileloader.CsvDataFileLoader;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
+import org.dbunit.util.search.DepthFirstSearch;
 import org.dbunit.util.search.SearchException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +39,7 @@ import java.util.Set;
 import static activesupport.file.Files.createFolder;
 
 public class DBUnit {
+    private static final Logger logger = LoggerFactory.getLogger(TablesDependencyHelper.class);
     private static IDatabaseConnection dbUnitConnection;
 
     public static IDatabaseConnection getDBUnitConnection() throws UnsupportedDatabaseDriverException {
@@ -72,7 +77,7 @@ public class DBUnit {
 
         try {
             dbConnection = DriverManager.getConnection(String.format(
-                    "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/?user=%s&password=%s&useSSL=false",
+                    "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/OLCS_RDS_OLCSDB?user=%s&password=%s&useSSL=false",
                     Properties.get("env"),
                     loadDBCredential(DatabaseCredentialType.USERNAME),
                     loadDBCredential(DatabaseCredentialType.PASSWORD))
@@ -147,12 +152,20 @@ public class DBUnit {
     // dependent tables database export: export table X and all tables that
     // have a PK which is a FK on X, in the right order for insertion
     public static IDataSet dependantTableExport(@NotNull String rootTableName) throws Exception {
-        String[] depTableNames = (String[]) dependantTables(rootTableName).toArray();
+        String[] depTableNames = (String[]) dependentTables(rootTableName).toArray();
         return getDBUnitConnection().createDataSet(depTableNames);
     }
 
-    public static Set dependantTables(@NotNull String rootTable) throws UnsupportedDatabaseDriverException, SearchException {
+    public static Set dependentTables(@NotNull String rootTable) throws UnsupportedDatabaseDriverException, SearchException {
         return TablesDependencyHelper.getDirectDependsOnTables(getDBUnitConnection(), rootTable);
+    }
+
+    public static Set dependentTables(@NotNull String rootTable, int depth) throws SearchException, UnsupportedDatabaseDriverException {
+        logger.debug("getDirectDependsOnTables(connection={}, tableName={}) - start", getDBUnitConnection(), rootTable);
+        ExportedKeysSearchCallback callback = new ExportedKeysSearchCallback(getDBUnitConnection());
+        DepthFirstSearch search = new DepthFirstSearch(depth);
+        Set tables = search.search(new String[]{rootTable}, callback);
+        return tables;
     }
 
     public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
@@ -162,5 +175,19 @@ public class DBUnit {
             throw new DatabaseUnitException(getDiffBetweenTables(expectedDataSet.getTable(table), expectedDataSet.getTable(table)), e);
         }
     }
+
+    public static boolean include(@NotNull ITable table, @NotNull String column, @NotNull String value) throws DataSetException {
+        boolean foundMatch = false;
+        int size = table.getRowCount();
+
+        for (int i = 0; i < size; i++) {
+            if (String.valueOf(table.getValue(i, column)).equals(value)) {
+                foundMatch = true;
+            }
+        }
+
+        return  foundMatch;
+    }
+
 }
 
