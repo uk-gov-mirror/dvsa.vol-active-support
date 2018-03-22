@@ -35,7 +35,7 @@ public class RestUtils {
                 .headers(headers)
                 .body(requestBody)
                 .when().config(RestAssuredConfig.config().sslConfig(new SSLConfig().relaxedHTTPSValidation().allowAllHostnames()))
-                .post(serviceEndPoint)
+                .put(serviceEndPoint)
                 .then();
         return response;
     }
