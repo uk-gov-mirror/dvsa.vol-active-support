@@ -19,12 +19,12 @@ public class Properties {
         System.setProperty(property, value);
     }
 
-    public static String get(@NotNull String property) throws MissingRequiredArgument {
+    public static String get(@NotNull String property) {
         boolean required = false;
         return get(property, required);
     }
 
-    public static String get(@NotNull String property, boolean required) throws MissingRequiredArgument {
+    public static String get(@NotNull String property, boolean required) {
         String propValue = null;
 
         if (System.getenv(property) != null) {
@@ -42,7 +42,7 @@ public class Properties {
         return propValue;
     }
 
-    public static boolean has(@NotNull String property) throws MissingRequiredArgument {
+    public static boolean has(@NotNull String property) {
         String propValue = Properties.get(property);
         return propValue != null && !propValue.isEmpty();
     }
