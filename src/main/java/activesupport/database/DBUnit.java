@@ -11,6 +11,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.database.search.ExportedKeysSearchCallback;
 import org.dbunit.database.search.TablesDependencyHelper;
+import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -31,9 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Set;
 
 import static activesupport.file.Files.createFolder;
@@ -70,7 +69,7 @@ public class DBUnit {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
-           throw new UnsupportedDatabaseDriverException();
+            throw new UnsupportedDatabaseDriverException();
         }
 
         Connection dbConnection = null;
@@ -95,6 +94,12 @@ public class DBUnit {
         dataSet = new QueryDataSet(getDBUnitConnection());
         dataSet.addTable(fileName, query);
         return dataSet;
+    }
+
+    public static ResultSet checkResult(String sql) throws UnsupportedDatabaseDriverException, SQLException {
+        PreparedStatement preparedStatement = getDBUnitConnection().getConnection().prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet;
     }
 
     public static IDataSet readXMLFileAsDataSet(String file) {
@@ -186,7 +191,7 @@ public class DBUnit {
             }
         }
 
-        return  foundMatch;
+        return foundMatch;
     }
 
 }
