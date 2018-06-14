@@ -26,14 +26,14 @@ public class Browser {
         try {
             if (operatingSystem.contains("Windows") && browserName.contains("chrome")) {
                 checkFileExists(windows, chrome, "webdriver.chrome.driver");
-            }  if (!operatingSystem.contains("Windows") && !browserName.contains("chrome")) {
+            }
+            if (!operatingSystem.contains("Windows") && !browserName.contains("chrome")) {
                 checkFileExists(windows, firefoxDriver, "webdriver.firefox.marionette");
             }
-    } catch (Exception e) {
-        e.printStackTrace();
-        throw new MissingDriverException();
-    }
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MissingDriverException();
+        }
     }
 
     public WebDriver navigate() throws IllegalBrowserException {
@@ -60,7 +60,6 @@ public class Browser {
             createDriverPath(driverProperty, getLocalGeckoDriver, null, null);
         }
     }
-
 
     private static String createDriverPath(String driverProperty, String path, String extention, String extention2){
       return  System.setProperty(driverProperty, path + extention + extention2);
