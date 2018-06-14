@@ -37,6 +37,7 @@
         <jenkins-client.version>0.3.7</jenkins-client.version>
         <rest-assured.version>3.0.7</rest-assured.version>
         <jsch.version>0.1.54</jsch.version>
+        <selenium.version>3.7.1</selenium.version>
     </properties>
 
     <build>
@@ -119,6 +120,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
@@ -147,6 +154,11 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>${jsch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.1.0</version>
         </dependency>
 
     </dependencies>
