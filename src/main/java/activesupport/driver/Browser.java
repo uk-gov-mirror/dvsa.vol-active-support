@@ -24,17 +24,22 @@ public class Browser {
         String chrome = "chromedriver";
         String firefoxDriver = "geckodriver";
         try {
-            if (operatingSystem.contains("windows") && browserName.contains("chrome")) {
+            if (operatingSystem.contains("Windows") && browserName.contains("chrome")) {
                 checkFileExists(windows, chrome, "webdriver.chrome.driver");
-            }  if (!operatingSystem.contains("windows") && !browserName.contains("chrome")) {
+            }  if (!operatingSystem.contains("Windows") && !browserName.contains("chrome")) {
                 checkFileExists(windows, firefoxDriver, "webdriver.firefox.marionette");
             }
     } catch (Exception e) {
         e.printStackTrace();
         throw new MissingDriverException();
     }
-        whichBrowser(browserName);
-        setDriver(driver);
+
+    }
+
+    public WebDriver navigate() throws IllegalBrowserException {
+      driver =  whichBrowser(browserName);
+      setDriver(driver);
+      return driver;
     }
 
     public static void setDriver(WebDriver driver) {
@@ -56,9 +61,6 @@ public class Browser {
         }
     }
 
-    public static WebDriver getDriver() {
-        return driver;
-    }
 
     private static String createDriverPath(String driverProperty, String path, String extention, String extention2){
       return  System.setProperty(driverProperty, path + extention + extention2);
@@ -78,7 +80,7 @@ public class Browser {
                     driver = new ChromeDriver();
             case "firefox":
                 FirefoxOptions optionsFirefox = new FirefoxOptions();
-               optionsFirefox.setCapability("marionette", true);
+               optionsFirefox.setCapability("marionette", false);
                 if (driver == null)
                     driver = new FirefoxDriver(optionsFirefox);
                 break;
@@ -89,7 +91,7 @@ public class Browser {
     }
 
     public void quit() throws IllegalBrowserException, MissingDriverException {
-        if (getDriver() != null)
-            getDriver().quit();
+        if (navigate() != null)
+            navigate().quit();
     }
 }
