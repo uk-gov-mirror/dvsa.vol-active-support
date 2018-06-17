@@ -15,6 +15,16 @@ public class Str {
         return new Scanner(inputStream).useDelimiter("\\A").next();
     }
 
+    public static String randomNumbers(int length) {
+        StringBuilder str = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            str.append(Int.random(0, 9));
+        }
+
+        return str.toString();
+    }
+
     public static String randomWord(int minCharacters, int maxCharacters){
         int wordLength = Int.random(minCharacters, maxCharacters);
 
