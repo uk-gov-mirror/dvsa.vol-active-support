@@ -74,9 +74,11 @@ public class Browser {
                 optionsChrome.setHeadless(true);
                 if (driver == null)
                     driver = new ChromeDriver(optionsChrome);
+                break;
             case "chrome":
                 if (driver == null)
                     driver = new ChromeDriver();
+                break;
             case "firefox":
                 FirefoxOptions optionsFirefox = new FirefoxOptions();
                optionsFirefox.setCapability("marionette", false);
