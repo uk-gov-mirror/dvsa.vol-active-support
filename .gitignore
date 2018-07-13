@@ -71,3 +71,9 @@ bin/
 /out/
 ### Artifacts
 target/
+
+### Drivers
+chromedriver
+chromedriver.exe
+geckodriver
+geckodriver.exe
