@@ -6,6 +6,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URL;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -13,6 +14,10 @@ import static io.restassured.RestAssured.given;
 public class RestUtils {
 
     private static ValidatableResponse response;
+
+    public static ValidatableResponse post(@NotNull Object requestBody, @NotNull URL serviceEndPoint, @NotNull Map<String, String> headers) {
+        return post(requestBody, serviceEndPoint.toString(), headers);
+    }
 
     public static ValidatableResponse post(@NotNull Object requestBody, @NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
         response = given()
@@ -27,6 +32,10 @@ public class RestUtils {
         return response;
     }
 
+    public static ValidatableResponse put(@NotNull Object requestBody, @NotNull URL serviceEndPoint, @NotNull Map<String, String> headers) {
+        return put(requestBody, serviceEndPoint.toString(), headers);
+    }
+
     public static ValidatableResponse put(@NotNull Object requestBody, @NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
         response = given()
                 .urlEncodingEnabled(true)
@@ -38,6 +47,10 @@ public class RestUtils {
                 .put(serviceEndPoint)
                 .then();
         return response;
+    }
+
+    public static ValidatableResponse get(@NotNull URL serviceEndPoint, @NotNull Map<String, String> headers) {
+        return get(serviceEndPoint.toString(), headers);
     }
 
     public static ValidatableResponse get(@NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
