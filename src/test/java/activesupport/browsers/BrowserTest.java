@@ -9,12 +9,13 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.Assert.assertTrue;
 
 public class BrowserTest {
-    Browser browser = new Browser();
 
-    public static void main(String[] args) throws MissingDriverException, IllegalBrowserException {
-        Browser browser = new Browser();
-        browser.navigate().get("http://www.google.co.uk");
-       assertTrue(browser.navigate().findElement(By.xpath("//*[@name='q']")).isDisplayed());
-       browser.quit();
-    }
+    public static void main(String[] args) throws MissingDriverException, IllegalBrowserException, InterruptedException {
+
+        Browser.navigate().get("http://bbc.co.uk");
+        if (Browser.isBrowserOpen()) {
+            Browser.quit();
+        }
+        Browser.navigate().get("http://www.google.co.uk");
+        }
 }
