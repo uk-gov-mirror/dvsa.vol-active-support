@@ -18,7 +18,6 @@ public class Browser {
     private String getLocalChromeDriver = System.getenv("CHROMEDRIVER");
     private String getLocalGeckoDriver = System.getenv("FIREFOXDRIVER");
     private static WebDriver driver;
-    private  String browserName = System.getProperty("browser");
 
     public static void setDriver(WebDriver driver) {
         Browser.driver = driver;
@@ -44,7 +43,6 @@ public class Browser {
                 options.setCapability("marionette", true);
                 if (driver == null)
                     driver = new FirefoxDriver(options);
-
                 break;
             case "chrome":
                 if (driver == null)
@@ -69,12 +67,12 @@ public class Browser {
     }
 
     public static   boolean isBrowserOpen() throws IllegalBrowserException {
-        boolean isClosed = false;
+        boolean isOpen = false;
 
             if (driver != null) {
-                isClosed = true;
+                isOpen = true;
             } else {
-            isClosed = false;
+            isOpen = false;
         }
         return isClosed;
     }
