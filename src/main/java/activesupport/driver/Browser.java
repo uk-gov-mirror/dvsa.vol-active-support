@@ -74,6 +74,6 @@ public class Browser {
             } else {
             isOpen = false;
         }
-        return isClosed;
+        return isOpen;
     }
 }
