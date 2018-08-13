@@ -39,10 +39,9 @@ public class Jenkins {
         String password = Properties.get("JENKINS_PASSWORD", true);
 
         JenkinsServer batchProcessJobs = new JenkinsServer(new URI("http://olcsci.shd.ci.nonprod.dvsa.aws:8080/"), username, password);
-        batchProcessJobs.enableJob(job.toString());
         JobWithDetails details = batchProcessJobs.getJob(job.toString());
         int lastSuccessfulBuild = details.getNextBuildNumber();
-        details.build(params);
+        details.build(params,true);
         List<Build> builds = details.getAllBuilds(Range.build().from(lastSuccessfulBuild).build());
 
         for (Build build : builds) {
