@@ -2,7 +2,7 @@ package activesupport.proxy;
 
 public class Proxy {
 
-    private static org.openqa.selenium.Proxy createZapProxyConfigurationForWebDriver(String iPAddress, String portNo) {
+    public static org.openqa.selenium.Proxy createZapProxyConfigurationForWebDriver(String iPAddress, String portNo) {
         org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
 
         proxy.setHttpProxy(String.format("%s:%s", iPAddress, portNo));
