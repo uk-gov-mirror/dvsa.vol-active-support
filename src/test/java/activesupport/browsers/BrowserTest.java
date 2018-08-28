@@ -10,8 +10,10 @@ import static org.junit.Assert.assertTrue;
 
 public class BrowserTest {
 
+
     public static void main(String[] args) throws MissingDriverException, IllegalBrowserException, InterruptedException {
 
+        System.setProperty("browser","firefox");
         Browser.navigate().get("http://bbc.co.uk");
         if (Browser.isBrowserOpen()) {
             Browser.quit();
