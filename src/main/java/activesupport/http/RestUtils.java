@@ -62,7 +62,7 @@ public class RestUtils {
         return response;
     }
 
-    public static void UrlEncoding(boolean enabled) {
+    public static void urlEncoding(boolean enabled) {
         RestAssured.urlEncodingEnabled = enabled;
     }
 
