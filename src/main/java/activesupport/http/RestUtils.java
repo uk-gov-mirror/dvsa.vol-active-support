@@ -1,5 +1,6 @@
 package activesupport.http;
 
+import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.ContentType;
@@ -21,7 +22,6 @@ public class RestUtils {
 
     public static ValidatableResponse post(@NotNull Object requestBody, @NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
         response = given()
-                .urlEncodingEnabled(true)
                 .log().all()
                 .contentType(ContentType.JSON)
                 .headers(headers)
@@ -38,7 +38,6 @@ public class RestUtils {
 
     public static ValidatableResponse put(@NotNull Object requestBody, @NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
         response = given()
-                .urlEncodingEnabled(true)
                 .log().all()
                 .contentType(ContentType.JSON)
                 .headers(headers)
@@ -55,7 +54,6 @@ public class RestUtils {
 
     public static ValidatableResponse get(@NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
         response = given()
-                .urlEncodingEnabled(true)
                 .log().all()
                 .headers(headers)
                 .when().config(RestAssuredConfig.config().sslConfig(new SSLConfig().relaxedHTTPSValidation().allowAllHostnames()))
@@ -63,4 +61,9 @@ public class RestUtils {
                 .then();
         return response;
     }
+
+    public static void UrlEncoding(boolean enabled) {
+        RestAssured.urlEncodingEnabled = enabled;
+    }
+
 }
