@@ -10,5 +10,4 @@ public class Proxy {
         proxy.setSslProxy(String.format("%s:%s", iPAddress, portNo));
         return proxy;
     }
-
 }
