@@ -31,7 +31,6 @@ public class BrowserTest {
             Browser.quit();
         }
         Browser.navigate().get("http://www.google.co.uk");
-
     }
 
     @Test
@@ -43,7 +42,6 @@ public class BrowserTest {
             Browser.quit();
         }
         Browser.navigate().get("http://www.google.co.uk");
-
     }
 
     @Test
