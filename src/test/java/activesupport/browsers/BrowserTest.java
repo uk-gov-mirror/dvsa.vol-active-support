@@ -37,14 +37,11 @@ public class BrowserTest {
 
     @Test
     public void proxyTest() throws MissingDriverException, IllegalBrowserException {
-
-        System.setProperty("browser", "proxy");
         Browser.navigate().get("http://bbc.co.uk");
         if (Browser.isBrowserOpen()) {
             Browser.quit();
         }
         Browser.navigate().get("http://www.google.co.uk");
-
     }
 
     @Test

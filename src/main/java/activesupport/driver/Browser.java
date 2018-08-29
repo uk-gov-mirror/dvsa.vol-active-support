@@ -3,12 +3,14 @@ package activesupport.driver;
 import activesupport.IllegalBrowserException;
 import activesupport.MissingDriverException;
 import activesupport.proxy.Proxy;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
 
@@ -57,12 +59,10 @@ public class Browser {
                 break;
             case "proxy":
                 FirefoxOptions optionProxy = new FirefoxOptions();
-                optionProxy.setCapability("Proxy", Proxy.createZapProxyConfigurationForWebDriver("localhost","8090"));
-                optionProxy.setCapability("javascriptEnabled", true);
-                optionProxy.setCapability("handleAlerts", true);
-                optionProxy.setCapability("marionette", true);
-                if (driver == null)
-                    driver = new FirefoxDriver(optionProxy);
+                optionProxy.setProxy(Proxy.createZapProxyConfigurationForWebDriver("localhost","8090"));
+           if (driver =
+                  driver = new FirefoxDriver(optionProxy);
+           break;
             default:
                 throw new IllegalBrowserException();
         }
