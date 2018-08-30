@@ -2,12 +2,15 @@ package activesupport.driver;
 
 import activesupport.IllegalBrowserException;
 import activesupport.MissingDriverException;
+import activesupport.proxy.Proxy;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
 
@@ -26,9 +29,9 @@ public class Browser {
     public static WebDriver navigate() throws IllegalBrowserException {
 
         if (driver == null) {
-               setDriver(whichBrowser(System.getProperty("browser")));
-           }
-           return driver;
+            setDriver(whichBrowser(System.getProperty("browser")));
+        }
+        return driver;
     }
 
     private static WebDriver whichBrowser(String browserName) throws IllegalBrowserException {
@@ -37,7 +40,7 @@ public class Browser {
         switch (browserName) {
             case "headless":
                 FirefoxOptions options = new FirefoxOptions();
-               options.setHeadless(true);
+                options.setHeadless(true);
                 options.setCapability("javascriptEnabled", true);
                 options.setCapability("handleAlerts", true);
                 options.setCapability("marionette", true);
@@ -50,10 +53,16 @@ public class Browser {
                 break;
             case "firefox":
                 FirefoxOptions optionsFirefox = new FirefoxOptions();
-               optionsFirefox.setCapability("marionette", true);
+                optionsFirefox.setCapability("marionette", true);
                 if (driver == null)
                     driver = new FirefoxDriver(optionsFirefox);
                 break;
+            case "proxy":
+                FirefoxOptions optionProxy = new FirefoxOptions();
+                optionProxy.setProxy(Proxy.createZapProxyConfigurationForWebDriver("localhost","8090"));
+           if (driver =
+                  driver = new FirefoxDriver(optionProxy);
+           break;
             default:
                 throw new IllegalBrowserException();
         }
@@ -62,16 +71,16 @@ public class Browser {
 
     public static void quit() throws IllegalBrowserException, MissingDriverException {
         if (driver != null)
-           driver.close();
-           setDriver(null);
+            driver.close();
+        setDriver(null);
     }
 
-    public static   boolean isBrowserOpen() throws IllegalBrowserException {
+    public static boolean isBrowserOpen() throws IllegalBrowserException {
         boolean isOpen = false;
 
-            if (driver != null) {
-                isOpen = true;
-            } else {
+        if (driver != null) {
+            isOpen = true;
+        } else {
             isOpen = false;
         }
         return isOpen;

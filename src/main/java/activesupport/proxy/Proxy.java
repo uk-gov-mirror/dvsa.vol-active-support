@@ -8,7 +8,7 @@ public class Proxy {
         proxy.setHttpProxy(String.format("%s:%s", iPAddress, portNo));
         proxy.setFtpProxy(String.format("%s:%s", iPAddress, portNo));
         proxy.setSslProxy(String.format("%s:%s", iPAddress, portNo));
+        System.out.println(proxy);
         return proxy;
     }
-
 }
