@@ -19,7 +19,11 @@ public class Str {
         StringBuilder str = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
-            str.append(Int.random(0, 9));
+            if (i == 0) {
+                str.append(Int.random(1, 9));
+            } else {
+                str.append(Int.random(0, 9));
+            }
         }
 
         return str.toString();

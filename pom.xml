@@ -6,7 +6,7 @@
 
     <groupId>org.dvsa.testing.lib</groupId>
     <artifactId>active-support</artifactId>
-    <version>1.2.6.EUPA</version>
+    <version>1.2.7.EUPA</version>
 
     <repositories>
         <repository>
