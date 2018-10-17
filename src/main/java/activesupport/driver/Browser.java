@@ -60,7 +60,7 @@ public class Browser {
             case "proxy":
                 FirefoxOptions optionProxy = new FirefoxOptions();
                 optionProxy.setProxy(Proxy.createZapProxyConfigurationForWebDriver("localhost","8090"));
-           if (driver == null)
+           if (driver =
                   driver = new FirefoxDriver(optionProxy);
            break;
             default:
@@ -75,8 +75,8 @@ public class Browser {
         setDriver(null);
     }
 
-    public static boolean isBrowserOpen() {
-        boolean isOpen;
+    public static boolean isBrowserOpen() throws IllegalBrowserException {
+        boolean isOpen = false;
 
         if (driver != null) {
             isOpen = true;
