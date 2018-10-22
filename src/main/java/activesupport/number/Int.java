@@ -19,6 +19,6 @@ public class Int {
      * @param max an integer specifying the maximum value, which is inclusive.
      * */
     public static int random(int min, int max){
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        return max == 0 ? 0 : ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 }
