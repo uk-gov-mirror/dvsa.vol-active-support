@@ -14,7 +14,7 @@ public class Properties {
     private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
     public static void set(@NotNull String property, @NotNull String value){
-        String message = String.format("[INFO] PROPERTY SET: %s=%s", property, value);
+        String message = String.format("\n[INFO] PROPERTY SET: %s=%s\n", property, value);
         Output.printColoredLog(message);
         System.setProperty(property, value);
     }
@@ -37,7 +37,7 @@ public class Properties {
             throw new MissingRequiredArgument("[ERROR] " + property + " is required and must be set either at runtime or as a system variable");
         }
 
-        String message = String.format("[INFO] PROPERTY RETRIEVED: %s=%s", property, propValue);
+        String message = String.format("\n[INFO] PROPERTY RETRIEVED: %s=%s\n", property, propValue);
         Output.printColoredLog(message);
         return propValue;
     }
@@ -71,7 +71,7 @@ public class Properties {
             inputStream.close();
             System.setProperties(properties);
         } catch (IOException e){
-            Output.printColoredLog(String.format("[WARNING] Unable to find or load system properties at %s", path));
+            Output.printColoredLog(String.format("\n[WARNING] Unable to find or load system properties at %s\n", path));
         }
     }
 
@@ -102,13 +102,13 @@ public class Properties {
 
                 properties.setProperty(key, value);
 
-                Output.printColoredLog(String.format("[INFO] PROPERTY  SET: %s=%s", key, value));
+                Output.printColoredLog(String.format("\n[INFO] PROPERTY  SET: %s=%s\n", key, value));
             }
 
             properties.store(outputStream, null);
         }
 
-        Output.printColoredLog(String.format("[INFO] PROPERTIES STORED: Path to file is %s", path));
+        Output.printColoredLog(String.format("\n[INFO] PROPERTIES STORED: Path to file is %s\n", path));
     }
 
 }
