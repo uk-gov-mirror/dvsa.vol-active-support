@@ -51,7 +51,7 @@ public class Properties {
     }
 
     private static String hidePasswords(@NotNull String property, @NotNull String value) {
-        return StringUtils.containsIgnoreCase(property, "password") ? value.replaceAll("\\w", "*") : value ;
+        return StringUtils.containsIgnoreCase(property, "password") && !value.isEmpty() ? value.replaceAll("\\w", "*") : value ;
     }
 
 }
