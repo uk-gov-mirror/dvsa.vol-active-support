@@ -2,6 +2,7 @@ package activesupport.system;
 
 import activesupport.MissingRequiredArgument;
 import activesupport.system.out.Output;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -14,6 +15,7 @@ public class Properties {
     private static final String defaultConfigPropertiesPath = "properties/config.properties";
 
     public static void set(@NotNull String property, @NotNull String value){
+        value = hidePasswords(property, value);
         String message = String.format("\n[INFO] PROPERTY SET: %s=%s\n", property, value);
         Output.printColoredLog(message);
         System.setProperty(property, value);
@@ -36,6 +38,8 @@ public class Properties {
         if (required && propValue == null) {
             throw new MissingRequiredArgument("[ERROR] " + property + " is required and must be set either at runtime or as a system variable");
         }
+
+        propValue = hidePasswords(property, propValue);
 
         String message = String.format("\n[INFO] PROPERTY RETRIEVED: %s=%s\n", property, propValue);
         Output.printColoredLog(message);
@@ -109,6 +113,10 @@ public class Properties {
         }
 
         Output.printColoredLog(String.format("\n[INFO] PROPERTIES STORED: Path to file is %s\n", path));
+    }
+
+    private static String hidePasswords(@NotNull String property, @NotNull String value) {
+        return StringUtils.containsIgnoreCase(property, "password") ? value.replaceAll("\\w", "*");
     }
 
 }
