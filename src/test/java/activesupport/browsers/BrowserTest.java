@@ -14,7 +14,7 @@ public class BrowserTest {
 @Test
     public void chromeTest() throws MissingDriverException, IllegalBrowserException {
 
-             System.setProperty("browser", "chrome");
+             System.setProperty("browser", "headless");
             Browser.navigate().get("http://bbc.co.uk");
             if (Browser.isBrowserOpen()) {
                 Browser.quit();
