@@ -50,4 +50,17 @@ public class RestUtils {
                 .then();
         return response;
     }
+
+    public static ValidatableResponse delete(@NotNull Object requestBody, @NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
+        response = given()
+                .urlEncodingEnabled(true)
+                .log().all()
+                .contentType(ContentType.JSON)
+                .headers(headers)
+                .body(requestBody)
+                .when().config(RestAssuredConfig.config().sslConfig(new SSLConfig().relaxedHTTPSValidation().allowAllHostnames()))
+                .delete(serviceEndPoint)
+                .then();
+        return response;
+    }
 }
