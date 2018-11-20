@@ -3,6 +3,7 @@ package activesupport.database;
 import activesupport.MissingRequiredArgument;
 import activesupport.database.credential.DatabaseCredentialType;
 import activesupport.database.exception.UnsupportedDatabaseDriverException;
+import activesupport.database.url.DbURL;
 import activesupport.system.Properties;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
@@ -40,6 +41,8 @@ import static activesupport.file.Files.createFolder;
 public class DBUnit {
     private static final Logger logger = LoggerFactory.getLogger(TablesDependencyHelper.class);
     private static IDatabaseConnection dbUnitConnection;
+    private static String getEnv = Properties.get("env");
+    static DbURL dbURL = new DbURL();
 
     public static IDatabaseConnection getDBUnitConnection() throws UnsupportedDatabaseDriverException {
         return getDBUnitConnection(Driver.MYSQL);
@@ -75,11 +78,9 @@ public class DBUnit {
         Connection dbConnection = null;
 
         try {
-            dbConnection = DriverManager.getConnection(String.format(
-                    "jdbc:mysql://olcsdb-rds.olcs.%S.nonprod.dvsa.aws:3306/OLCS_RDS_OLCSDB?user=%s&password=%s&useSSL=false",
-                    Properties.get("env"),
+            dbConnection = DriverManager.getConnection(dbURL.getDBUrl(getEnv),
                     loadDBCredential(DatabaseCredentialType.USERNAME),
-                    loadDBCredential(DatabaseCredentialType.PASSWORD))
+                    loadDBCredential(DatabaseCredentialType.PASSWORD)
             );
         } catch (MissingRequiredArgument | SQLException e) {
             e.printStackTrace();
