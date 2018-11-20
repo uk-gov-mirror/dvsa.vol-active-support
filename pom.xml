@@ -11,14 +11,14 @@
     <repositories>
         <repository>
             <id>devappci-shd-pri-qarepo</id>
-            <activesupport.url>s3://devappci-shd-pri-qarepo</activesupport.url>
+            <url>s3://devappci-shd-pri-qarepo</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
             <id>devappci-shd-pri-qarepo</id>
-            <activesupport.url>s3://devappci-shd-pri-qarepo</activesupport.url>
+            <url>s3://devappci-shd-pri-qarepo</url>
         </repository>
     </distributionManagement>
 
