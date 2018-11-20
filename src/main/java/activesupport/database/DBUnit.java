@@ -78,9 +78,7 @@ public class DBUnit {
         Connection dbConnection = null;
 
         try {
-            dbConnection = DriverManager.getConnection(dbURL.getDBUrl(getEnv),
-                    loadDBCredential(DatabaseCredentialType.USERNAME),
-                    loadDBCredential(DatabaseCredentialType.PASSWORD)
+            dbConnection = DriverManager.getConnection(dbURL.getDBUrl(getEnv)
             );
         } catch (MissingRequiredArgument | SQLException e) {
             e.printStackTrace();
@@ -135,7 +133,7 @@ public class DBUnit {
         return equals;
     }
 
-    private static String loadDBCredential(@NotNull DatabaseCredentialType databaseCredentialType) throws MissingRequiredArgument {
+    public static String loadDBCredential(@NotNull DatabaseCredentialType databaseCredentialType) throws MissingRequiredArgument {
         return Properties.get(databaseCredentialType.toString(), true);
     }
 
