@@ -8,12 +8,14 @@ import static org.junit.Assert.assertEquals;
 public class DbURLTest {
 
     DbURL url = new DbURL();
-    String dbUsername = System.setProperty("dbUsername", "testUser");
-    String dbPassword = System.setProperty("dbPassword", "testPass");
+
+    public DbURLTest() {
+        System.setProperty("dbUsername", "testUser");
+        System.setProperty("dbPassword", "testPass");
+    }
 
     @Test
     public void getIntDbURL() {
-
         String intURL = "jdbc:mysql://olcsdb-rds.olcs.int.prod.dvsa.aws:3306/OLCS_RDS_OLCSDB?user=testUser&password=testPass&useSSL=false";
         String URL = url.getDBUrl("int");
         assertEquals(intURL, URL);
@@ -48,4 +50,3 @@ public class DbURLTest {
         assertEquals(intURL, URL);
     }
 }
-
