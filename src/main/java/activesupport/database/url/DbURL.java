@@ -1,5 +1,9 @@
 package activesupport.database.url;
 
+import activesupport.database.credential.DatabaseCredentialType;
+
+import static activesupport.database.DBUnit.loadDBCredential;
+
 public class DbURL {
 
     public String getDBUrl(String env) {
@@ -7,12 +11,14 @@ public class DbURL {
         switch (env.toLowerCase().trim()) {
             case "int":
             case "pp":
-                dbURL = String.format("https://ssap1.olcs.%s.prod.dvsa.aws/",env);
+                dbURL = String.format("jdbc:mysql://olcsdb-rds.olcs.%s.prod.dvsa.aws:3306/OLCS_RDS_OLCSDB?user=%s&password=%s&useSSL=false",env,loadDBCredential(DatabaseCredentialType.USERNAME),
+                        loadDBCredential(DatabaseCredentialType.PASSWORD));
                 break;
             default:
-                dbURL = String.format("https://ssap1.olcs.%s.nonprod.dvsa.aws/",env);
+                dbURL = String.format("jdbc:mysql://olcsdb-rds.olcs.%s.nonprod.dvsa.aws:3306/OLCS_RDS_OLCSDB?user=%s&password=%s&useSSL=false",env,loadDBCredential(DatabaseCredentialType.USERNAME),
+                        loadDBCredential(DatabaseCredentialType.PASSWORD));
                 break;
         }
-        return dbURL.toLowerCase().trim();
+        return dbURL;
     }
 }
