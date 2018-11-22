@@ -115,8 +115,7 @@ public class MailClient implements AutoCloseable {
 
     @Override
     public void close() throws MessagingException {
-        closeFolder(folder);
-        closeStore(store);
+        closeFolder(folder).closeStore(store);
     }
 
     private MailClient openFolder(@NotNull Folder folder) throws MessagingException {
