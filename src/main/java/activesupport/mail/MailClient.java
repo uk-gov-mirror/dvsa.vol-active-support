@@ -101,7 +101,8 @@ public class MailClient implements AutoCloseable {
     }
 
     public Folder getFolder() throws MessagingException {
-        folder.open(Folder.READ_ONLY);
+        if (!folder.isOpen())
+            folder.open(Folder.READ_ONLY);
         return folder;
     }
 
