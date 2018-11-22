@@ -1,7 +1,9 @@
 package activesupport.mail;
 
+import activesupport.mail.enums.FolderPermission;
 import activesupport.mail.enums.MailProtocol;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.mail.*;
 import javax.mail.search.SearchTerm;
@@ -70,10 +72,9 @@ public class MailClient implements AutoCloseable {
     }
 
     public List<Message> find(Folder folder, SearchTerm criterion) throws MessagingException {
-        if (!this.folder.isOpen())
-            this.folder.open(Folder.READ_ONLY);
+        openFolder(folder);
 
-        return new ArrayList<>(Arrays.asList(this.folder.search(criterion))); // Done this to return a mutable list.
+        return new ArrayList<>(Arrays.asList(folder.search(criterion))); // Done this to return a mutable list.
     }
 
     private Properties protocolProperties(MailProtocol mailProtocol, String host, int portNumber){
@@ -101,22 +102,43 @@ public class MailClient implements AutoCloseable {
     }
 
     public Folder getFolder() throws MessagingException {
-        if (!folder.isOpen())
-            folder.open(Folder.READ_ONLY);
+        openFolder(folder);
         return folder;
     }
 
     public Folder getFolder(String folder) throws MessagingException {
+        closeFolder(this.folder); // Close current folder before switching.
         this.folder = store.getFolder(folder);
+        openFolder(this.folder);
         return this.folder;
     }
 
     @Override
     public void close() throws MessagingException {
+        closeFolder(folder);
+        closeStore(store);
+    }
+
+    private MailClient openFolder(@NotNull Folder folder) throws MessagingException {
+        return openFolder(folder, FolderPermission.ReadOnly);
+    }
+
+    private MailClient openFolder(@NotNull Folder folder, FolderPermission permission) throws MessagingException {
+        if (!folder.isOpen())
+            folder.open(permission.getPermission());
+        return this;
+    }
+
+    private MailClient closeFolder(@NotNull Folder folder) throws MessagingException {
         if (folder.isOpen())
             folder.close(true);
+        return this;
+    }
+
+    private MailClient closeStore(@NotNull Store store) throws MessagingException {
         if (store.isConnected())
             store.close();
+        return this;
     }
 
     public static class Builder {
