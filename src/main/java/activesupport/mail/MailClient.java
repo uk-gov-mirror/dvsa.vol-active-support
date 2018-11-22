@@ -27,7 +27,7 @@ public class MailClient implements AutoCloseable {
         store.connect(builder.host, builder.email, builder.password);
 
         try {
-            folder = store.getDefaultFolder(); // Defaults to getting the inbox folder.
+            folder = store.getFolder("Inbox"); // Defaults to getting the inbox folder.
         } catch (MessagingException e) {
             System.out.println("Unable to set folder to Inbox");
         }
@@ -100,7 +100,8 @@ public class MailClient implements AutoCloseable {
         return properties;
     }
 
-    public Folder getFolder() {
+    public Folder getFolder() throws MessagingException {
+        folder.open(Folder.READ_ONLY);
         return folder;
     }
 
