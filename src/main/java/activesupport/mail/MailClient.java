@@ -113,6 +113,8 @@ public class MailClient implements AutoCloseable {
 
     @Override
     public void close() throws MessagingException {
+        if (folder.isOpen())
+            folder.close(true);
         if (store.isConnected())
             store.close();
     }
