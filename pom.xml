@@ -38,6 +38,7 @@
         <rest-assured.version>3.0.7</rest-assured.version>
         <jsch.version>0.1.54</jsch.version>
         <selenium.version>3.7.1</selenium.version>
+        <javax.mail.version>1.4.7</javax.mail.version>
     </properties>
 
     <build>
@@ -159,6 +160,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${javax.mail.version}</version>
         </dependency>
 
     </dependencies>
