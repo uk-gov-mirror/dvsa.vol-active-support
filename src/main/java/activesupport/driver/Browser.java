@@ -22,6 +22,8 @@ import org.openqa.selenium.safari.SafariOptions;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Browser {
 
@@ -46,6 +48,8 @@ public class Browser {
     private static WebDriver whichBrowser(String browserName) throws IllegalBrowserException, MalformedURLException {
         browserName = browserName.toLowerCase().trim();
         FirefoxOptions options = new FirefoxOptions();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        Map<String, String> mobileEmulation = new HashMap<>();
         URL url = new URL("http://localhost:4444/wd/hub");
         switch (browserName) {
             case "headless":
@@ -61,40 +65,53 @@ public class Browser {
                     driver = new ChromeDriver();
                 break;
             case "firefox":
-                FirefoxOptions optionsFirefox = new FirefoxOptions();
-                optionsFirefox.setCapability("marionette", true);
+                options.setCapability("marionette", true);
                 if (driver == null)
-                    driver = new FirefoxDriver(optionsFirefox);
+                    driver = new FirefoxDriver(options);
                 break;
             case "proxy":
-                FirefoxOptions optionProxy = new FirefoxOptions();
-                optionProxy.setProxy(Proxy.createZapProxyConfigurationForWebDriver("localhost", "8090"));
+                options.setProxy(Proxy.createZapProxyConfigurationForWebDriver("localhost", "8090"));
                 if (driver == null)
-                    driver = new FirefoxDriver(optionProxy);
+                    driver = new FirefoxDriver(options);
                 break;
             case "chrome-grid":
-                ChromeOptions capabilities = new ChromeOptions();
-                capabilities.setCapability(CapabilityType.BROWSER_NAME, BrowserType.CHROME);
-                capabilities.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                chromeOptions.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                chromeOptions.setCapability("name", "Chrome");
 
-                driver = new RemoteWebDriver(url, capabilities);
+                driver = new RemoteWebDriver(url, chromeOptions);
+                break;
+            case "chrome-android":
+                mobileEmulation.put("deviceName", "Galaxy S5");
+
+                chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
+                chromeOptions.setCapability("name", "Chrome Mobile Web - Galaxy S5");
+
+                driver = new RemoteWebDriver(url, chromeOptions);
+                break;
+            case "iphone-grid":
+                mobileEmulation.put("deviceName", "iPhone 6/7/8");
+
+                chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
+                chromeOptions.setCapability("name", "iPhone 6/7/8");
+
+                driver = new RemoteWebDriver(url, chromeOptions);
                 break;
             case "firefox-grid":
-                optionsFirefox = new FirefoxOptions();
-                optionsFirefox.setCapability("marionette", true);
-                optionsFirefox.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                options.setCapability("marionette", true);
+                options.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                options.setCapability("name", "Firefox");
 
-                driver = new RemoteWebDriver(url, optionsFirefox);
+                driver = new RemoteWebDriver(url, options);
                 break;
             case "ie-grid":
                 InternetExplorerOptions internetExplorerOptions = new InternetExplorerOptions();
-                internetExplorerOptions.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                internetExplorerOptions.setCapability(CapabilityType.PLATFORM, Platform.WINDOWS);
 
                 driver = new RemoteWebDriver(url, internetExplorerOptions);
                 break;
             case "safari-grid":
                 SafariOptions safariOptions = new SafariOptions();
-                safariOptions.setCapability(CapabilityType.PLATFORM, Platform.LINUX);
+                safariOptions.setCapability(CapabilityType.PLATFORM, Platform.EL_CAPITAN);
 
                 driver = new RemoteWebDriver(url, safariOptions);
                 break;
