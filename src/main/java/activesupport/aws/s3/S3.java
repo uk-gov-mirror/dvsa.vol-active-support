@@ -56,6 +56,11 @@ public class S3 {
         return objectContents(s3Object);
     }
 
+    public static String getSecrets(){
+        S3Object s3Object = S3.getS3Object("devappci-shd-pri-qarepo", "secrets.json");
+        return objectContents(s3Object);
+    }
+
     public static String objectContents(@NotNull S3Object s3Object){
         return Str.inputStreamContents(s3Object.getObjectContent());
     }

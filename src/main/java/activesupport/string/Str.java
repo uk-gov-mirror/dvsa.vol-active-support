@@ -55,8 +55,8 @@ public class Str {
     public static String find(@NotNull String regex, @NotNull String subject){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(subject);
-        matcher.find();
-        return matcher.group();
+
+        return matcher.find() ? matcher.group() : "";
     }
 
 }
