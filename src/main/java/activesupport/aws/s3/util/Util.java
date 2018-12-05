@@ -35,6 +35,6 @@ public class Util {
             );
         }
 
-        return String.format("olcs.%s.nonprod.dvsa.aws/%s/%s", env, folderType.toString(), S3ObjectName);
+        return String.format("olcs.%s.nonprod.dvsa.aws/%s%s", env, folderType.toString(), S3ObjectName);
     }
 }

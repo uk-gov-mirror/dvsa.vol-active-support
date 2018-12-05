@@ -7,6 +7,10 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,6 +57,11 @@ public class S3 {
     public static String getNIGVExport(@NotNull String S3ObjectName) throws MissingRequiredArgument {
         String S3Path = Util.s3Path(S3ObjectName, FolderType.NI_EXPORT);
         S3Object s3Object = S3.getS3Object(s3BucketName, S3Path);
+        return objectContents(s3Object);
+    }
+
+    public static String getSecrets(){
+        S3Object s3Object = S3.getS3Object("devappci-shd-pri-qarepo", "secrets.json");
         return objectContents(s3Object);
     }
 
