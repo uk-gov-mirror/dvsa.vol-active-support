@@ -11,11 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class S3 {
 
+    private static AmazonS3 client = null;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
 
     public static String getLatestNIGVExportContents() throws IllegalAccessException, MissingRequiredArgument {
@@ -29,7 +28,7 @@ public class S3 {
 
     public static String getLatestNIExportName(ObjectListing objectListing) {
         String objectMetadata = getLastObjectMetadata(objectListing);
-        return Str.find("NiGvLicences-\\d{14}\\.csv", objectMetadata);
+        return Str.find("NiGvLicences-\\d{14}\\.csv", objectMetadata).get();
     }
 
     private static String getLastObjectMetadata(ObjectListing objectListing) {
@@ -89,12 +88,7 @@ public class S3 {
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         String s3ObjContents = new Scanner(s3Object.getObjectContent()).useDelimiter("\\A").next();
-        Pattern pattern = Pattern.compile("[\\w]{6,20}(?==0ASign in at)");
-        Matcher matcher = pattern.matcher(s3ObjContents);
-        matcher.find();
-        String tempPassword = matcher.group();
-        return tempPassword;
-
+        return Str.find("[\\w]{6,20}(?==0ASign in at)", s3ObjContents).get();
     }
 
     private static S3Object getS3Object(String s3BucketName, String s3Path) {
@@ -102,12 +96,17 @@ public class S3 {
     }
 
     private static AmazonS3 createS3Client(){
-        String region = "eu-west-1";
-        AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(region)
-                .build();
+        return createS3Client("eu-west-1");
+    }
 
-        return s3;
+    private static AmazonS3 createS3Client(String region){
+        if (client == null){
+            client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(new DefaultAWSCredentialsProviderChain())
+                    .withRegion(region)
+                    .build();
+        }
+
+        return client;
     }
 }
