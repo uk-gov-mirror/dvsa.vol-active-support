@@ -11,7 +11,7 @@ public class StrTest {
         String regex = "[\\d\\-\\/]+";
 
         String expectedSubstring = "06-01-2018";
-        String actualSubstring = Str.find(regex, subject);
+        String actualSubstring = Str.find(regex, subject).get();
 
         Assert.assertEquals(expectedSubstring, actualSubstring);
     }
