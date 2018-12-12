@@ -95,11 +95,11 @@ public class S3 {
         return createS3Client().getObject(new GetObjectRequest(s3BucketName, s3Path));
     }
 
-    private static AmazonS3 createS3Client(){
+    public static AmazonS3 createS3Client(){
         return createS3Client("eu-west-1");
     }
 
-    private static AmazonS3 createS3Client(String region){
+    public static AmazonS3 createS3Client(String region){
         if (client == null){
             client = AmazonS3ClientBuilder.standard()
                     .withCredentials(new DefaultAWSCredentialsProviderChain())
