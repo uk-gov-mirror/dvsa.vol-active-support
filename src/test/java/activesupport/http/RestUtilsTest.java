@@ -15,8 +15,19 @@ public class RestUtilsTest {
         {
             headers.put("test","header");
         }
+
         String url = "https://data.gov.uk/api";
-        ValidatableResponse response = RestUtils.get(url, headers);
+        ValidatableResponse response = RestUtils.get(url,queryParams(), headers);
         Assert.assertEquals(200,response.extract().statusCode());
+    }
+
+    public Map queryParams(){
+        Map<String,String> queryParam = new HashMap<>();
+        {
+            queryParam.put("","");
+            queryParam.put("knock","knock");
+            queryParam.put("who","is it");
+        }
+        return queryParam;
     }
 }
