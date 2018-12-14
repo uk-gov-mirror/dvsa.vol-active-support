@@ -4,6 +4,7 @@ import activesupport.MissingRequiredArgument;
 import activesupport.aws.s3.util.Util;
 import activesupport.string.Str;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
@@ -96,10 +97,10 @@ public class S3 {
     }
 
     public static AmazonS3 createS3Client(){
-        return createS3Client("eu-west-1");
+        return createS3Client(Regions.EU_WEST_1);
     }
 
-    public static AmazonS3 createS3Client(String region){
+    public static AmazonS3 createS3Client(Regions region){
         if (client == null){
             client = AmazonS3ClientBuilder.standard()
                     .withCredentials(new DefaultAWSCredentialsProviderChain())
