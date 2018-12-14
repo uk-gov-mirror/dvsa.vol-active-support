@@ -40,8 +40,8 @@ public class RestUtils {
         return response;
     }
 
-    public static ValidatableResponse get(@NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
-        response = given()
+    public static ValidatableResponse get(@NotNull String serviceEndPoint, Map<String,String> queryParam, @NotNull Map<String, String> headers) {
+        response = given().params(queryParam)
                 .urlEncodingEnabled(true)
                 .log().all()
                 .headers(headers)
