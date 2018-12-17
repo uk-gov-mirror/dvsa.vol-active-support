@@ -5,6 +5,7 @@ import io.restassured.config.SSLConfig;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -40,8 +41,19 @@ public class RestUtils {
         return response;
     }
 
-    public static ValidatableResponse get(@NotNull String serviceEndPoint, Map<String,String> queryParam, @NotNull Map<String, String> headers) {
+    public static ValidatableResponse getWithQueryParams(@NotNull String serviceEndPoint, @Nullable Map<String,String> queryParam, @NotNull Map<String, String> headers) {
         response = given().params(queryParam)
+                .urlEncodingEnabled(true)
+                .log().all()
+                .headers(headers)
+                .when().config(RestAssuredConfig.config().sslConfig(new SSLConfig().relaxedHTTPSValidation().allowAllHostnames()))
+                .get(serviceEndPoint)
+                .then();
+        return response;
+    }
+
+    public static ValidatableResponse get(@NotNull String serviceEndPoint, @NotNull Map<String, String> headers) {
+        response = given()
                 .urlEncodingEnabled(true)
                 .log().all()
                 .headers(headers)
