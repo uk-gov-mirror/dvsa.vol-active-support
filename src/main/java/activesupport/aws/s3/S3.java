@@ -96,6 +96,14 @@ public class S3 {
         return createS3Client().getObject(new GetObjectRequest(s3BucketName, s3Path));
     }
 
+    public static AmazonS3 client(){
+        return createS3Client();
+    }
+
+    public static AmazonS3 client(Regions region){
+        return createS3Client(region);
+    }
+
     public static AmazonS3 createS3Client(){
         return createS3Client(Regions.EU_WEST_1);
     }
