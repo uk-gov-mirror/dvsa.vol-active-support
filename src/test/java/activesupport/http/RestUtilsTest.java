@@ -10,7 +10,7 @@ import java.util.Map;
 public class RestUtilsTest {
 
     @Test
-    public void getCall(){
+    public void getCallWithParams(){
         Map<String,String> headers = new HashMap<>();
         {
             headers.put("test","header");
@@ -21,7 +21,19 @@ public class RestUtilsTest {
         Assert.assertEquals(200,response.extract().statusCode());
     }
 
-    public Map queryParams(){
+    @Test
+    public void getCallWithNoParams(){
+        Map<String,String> headers = new HashMap<>();
+        {
+            headers.put("test","header");
+        }
+
+        String url = "https://data.gov.uk/api";
+        ValidatableResponse response = RestUtils.get(url,null, headers);
+        Assert.assertEquals(200,response.extract().statusCode());
+    }
+
+    private Map queryParams(){
         Map<String,String> queryParam = new HashMap<>();
         {
             queryParam.put("","");
