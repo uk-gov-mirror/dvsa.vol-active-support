@@ -5,6 +5,7 @@ import activesupport.number.Int;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,11 +53,11 @@ public class Str {
         return Bool.random() ? (char) uppercaseASCIICode : (char) lowercaseASCIICode;
     }
 
-    public static String find(@NotNull String regex, @NotNull String subject){
+    public static Optional<String> find(@NotNull String regex, @NotNull String subject){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(subject);
 
-        return matcher.find() ? matcher.group() : "";
+        return matcher.find() ? Optional.of(matcher.group()) : Optional.empty();
     }
 
 }

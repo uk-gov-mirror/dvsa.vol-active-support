@@ -1,9 +1,11 @@
 package activesupport.aws.s3;
 
 import activesupport.MissingRequiredArgument;
+import activesupport.aws.s3.util.OurBuckets;
 import activesupport.aws.s3.util.Util;
 import activesupport.string.Str;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
@@ -11,11 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class S3 {
 
+    private static AmazonS3 client = null;
     private static String s3BucketName = "devapp-olcs-pri-olcs-autotest-s3";
 
     public static String getLatestNIGVExportContents() throws IllegalAccessException, MissingRequiredArgument {
@@ -29,7 +30,7 @@ public class S3 {
 
     public static String getLatestNIExportName(ObjectListing objectListing) {
         String objectMetadata = getLastObjectMetadata(objectListing);
-        return Str.find("NiGvLicences-\\d{14}\\.csv", objectMetadata);
+        return Str.find("NiGvLicences-\\d{14}\\.csv", objectMetadata).get();
     }
 
     private static String getLastObjectMetadata(ObjectListing objectListing) {
@@ -89,25 +90,83 @@ public class S3 {
 
     private static String extractTempPasswordFromS3Object(S3Object s3Object) {
         String s3ObjContents = new Scanner(s3Object.getObjectContent()).useDelimiter("\\A").next();
-        Pattern pattern = Pattern.compile("[\\w]{6,20}(?==0ASign in at)");
-        Matcher matcher = pattern.matcher(s3ObjContents);
-        matcher.find();
-        String tempPassword = matcher.group();
-        return tempPassword;
-
+        return Str.find("[\\w]{6,20}(?==0ASign in at)", s3ObjContents).get();
     }
 
     private static S3Object getS3Object(String s3BucketName, String s3Path) {
         return createS3Client().getObject(new GetObjectRequest(s3BucketName, s3Path));
     }
 
-    private static AmazonS3 createS3Client(){
-        String region = "eu-west-1";
-        AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(region)
-                .build();
-
-        return s3;
+    public static AmazonS3 client(){
+        return createS3Client();
     }
+
+    public static AmazonS3 client(Regions region){
+        return createS3Client(region);
+    }
+
+    public static AmazonS3 createS3Client(){
+        return createS3Client(Regions.EU_WEST_1);
+    }
+
+    public static AmazonS3 createS3Client(Regions region){
+        if (client == null){
+            client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(new DefaultAWSCredentialsProviderChain())
+                    .withRegion(region)
+                    .build();
+        }
+
+        return client;
+    }
+
+    public static void deleteObject(String key) {
+        deleteObject(OurBuckets.QA, key);
+    }
+
+    public static void deleteObject(String bucket, String key) {
+        ObjectListing objectListing = client().listObjects(bucket, key);
+        boolean hasNextList;
+
+        do {
+            for (S3ObjectSummary file : objectListing.getObjectSummaries()){
+                client().deleteObject(bucket, file.getKey());
+            }
+
+            hasNextList = hasNextObjectsList(objectListing);
+
+            if (hasNextList)
+                objectListing = client().listNextBatchOfObjects(objectListing);
+        } while (hasNextList);
+    }
+
+    public static boolean any(String bucket, String key) {
+        ObjectListing objectListing = client().listObjects(bucket, key);
+        boolean hasNextList;
+        boolean found = false;
+
+        do {
+            found = objectListing.getObjectSummaries().stream()
+                    .anyMatch((object) -> object.getKey().toLowerCase().contains(key.toLowerCase()));
+
+            if (found)
+                return true;
+
+            hasNextList = hasNextObjectsList(objectListing);
+
+            if (hasNextList)
+                objectListing = client().listNextBatchOfObjects(objectListing);
+        } while (hasNextList);
+
+        return false;
+    }
+
+    public static boolean hasNextObjectsList(ObjectListing objectListing) {
+        return objectListing.isTruncated();
+    }
+
+    public static boolean objectExists(String objectPath) {
+        return client().doesObjectExist(OurBuckets.QA, objectPath);
+    }
+
 }
