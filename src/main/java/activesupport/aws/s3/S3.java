@@ -1,6 +1,7 @@
 package activesupport.aws.s3;
 
 import activesupport.MissingRequiredArgument;
+import activesupport.aws.s3.util.OurBuckets;
 import activesupport.aws.s3.util.Util;
 import activesupport.string.Str;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
@@ -118,4 +119,54 @@ public class S3 {
 
         return client;
     }
+
+    public static void deleteObject(String key) {
+        deleteObject(OurBuckets.QA, key);
+    }
+
+    public static void deleteObject(String bucket, String key) {
+        ObjectListing objectListing = client().listObjects(bucket, key);
+        boolean hasNextList;
+
+        do {
+            for (S3ObjectSummary file : objectListing.getObjectSummaries()){
+                client().deleteObject(bucket, file.getKey());
+            }
+
+            hasNextList = hasNextObjectsList(objectListing);
+
+            if (hasNextList)
+                objectListing = client().listNextBatchOfObjects(objectListing);
+        } while (hasNextList);
+    }
+
+    public static boolean any(String bucket, String key) {
+        ObjectListing objectListing = client().listObjects(bucket, key);
+        boolean hasNextList;
+        boolean found = false;
+
+        do {
+            found = objectListing.getObjectSummaries().stream()
+                    .anyMatch((object) -> object.getKey().toLowerCase().contains(key.toLowerCase()));
+
+            if (found)
+                return true;
+
+            hasNextList = hasNextObjectsList(objectListing);
+
+            if (hasNextList)
+                objectListing = client().listNextBatchOfObjects(objectListing);
+        } while (hasNextList);
+
+        return false;
+    }
+
+    public static boolean hasNextObjectsList(ObjectListing objectListing) {
+        return objectListing.isTruncated();
+    }
+
+    public static boolean objectExists(String objectPath) {
+        return client().doesObjectExist(OurBuckets.QA, objectPath);
+    }
+
 }
