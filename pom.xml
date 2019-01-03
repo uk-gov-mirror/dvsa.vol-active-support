@@ -10,15 +10,15 @@
 
     <repositories>
         <repository>
-            <id>devappci-shd-pri-qarepo</id>
-            <url>s3://devappci-shd-pri-qarepo</url>
+            <id>nexus-releases</id>
+            <url>http://nexus.shd.ci.nonprod.dvsa.aws:8080/repository/dvsa-maven-raw/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>devappci-shd-pri-qarepo</id>
-            <url>s3://devappci-shd-pri-qarepo</url>
+            <id>nexus-releases</id>
+            <url>http://nexus.shd.ci.nonprod.dvsa.aws:8080/repository/dvsa-maven-raw/</url>
         </repository>
     </distributionManagement>
 
