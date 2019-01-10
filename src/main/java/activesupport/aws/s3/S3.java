@@ -97,6 +97,31 @@ public class S3 {
         return createS3Client().getObject(new GetObjectRequest(s3BucketName, s3Path));
     }
 
+    public static String getEcmtCorrespondences(String email, String licenceNumber, String permitApplicationNumber) {
+        return getEcmtCorrespondences(email, permitApplicationNumber);
+    }
+
+    public static String getEcmtCorrespondences(String email, String referenceNumber) {
+        String sanitisedEmail = email.replaceAll("[@\\.]","");
+        String licenceNumber = Str.find("\\w{2}\\d{7}", referenceNumber).get();
+        String permitNumber = Str.find("(?<=\\w{2}\\d{7} / )\\d+", referenceNumber).get();
+
+        String objectKey = Util.s3Path(
+                String.format(
+                        "%s__ECMT_permit_application_response_reference_%s__%s",
+                        sanitisedEmail,
+                        licenceNumber,
+                        permitNumber
+                ),
+                FolderType.EMAIL
+        );
+
+        return client().getObjectAsString(
+                        s3BucketName,
+                        objectKey
+        );
+    }
+
     public static AmazonS3 client(){
         return createS3Client();
     }
