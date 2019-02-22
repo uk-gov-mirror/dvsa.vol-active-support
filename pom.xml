@@ -11,14 +11,14 @@
     <repositories>
         <repository>
             <id>nexus-releases</id>
-            <url>http://nexus.shd.ci.nonprod.dvsa.aws:8080/repository/dvsa-maven-raw/</url>
+            <url>http://nexus.shd.ci.nonprod.dvsa.aws/repository/dvsa-maven-raw1/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
-            <url>http://nexus.shd.ci.nonprod.dvsa.aws:8080/repository/dvsa-maven-raw/</url>
+            <url>http://nexus.shd.ci.nonprod.dvsa.aws/repository/dvsa-maven-raw1/</url>
         </repository>
     </distributionManagement>
 
