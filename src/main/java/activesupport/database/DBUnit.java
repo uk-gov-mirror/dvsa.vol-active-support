@@ -10,9 +10,7 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
-import org.dbunit.database.search.ExportedKeysSearchCallback;
 import org.dbunit.database.search.TablesDependencyHelper;
-import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -23,7 +21,6 @@ import org.dbunit.util.TableFormatter;
 import org.dbunit.util.fileloader.CsvDataFileLoader;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
-import org.dbunit.util.search.DepthFirstSearch;
 import org.dbunit.util.search.SearchException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -78,8 +75,9 @@ public class DBUnit {
         Connection dbConnection = null;
 
         try {
-            dbConnection = DriverManager.getConnection(dbURL.getDBUrl(getEnv)
-            );
+            System.out.println("Connection String for db is " + dbURL.getDBUrl(getEnv));
+            System.out.println("connection db is " + DriverManager.getConnection(dbURL.getDBUrl(getEnv)));
+            dbConnection = DriverManager.getConnection(dbURL.getDBUrl(getEnv));
         } catch (MissingRequiredArgument | SQLException e) {
             e.printStackTrace();
         }
@@ -164,13 +162,13 @@ public class DBUnit {
         return TablesDependencyHelper.getDirectDependsOnTables(getDBUnitConnection(), rootTable);
     }
 
-    public static Set dependentTables(@NotNull String rootTable, int depth) throws SearchException, UnsupportedDatabaseDriverException {
+ /*   public static Set dependentTables(@NotNull String rootTable, int depth) throws SearchException, UnsupportedDatabaseDriverException {
         logger.debug("getDirectDependsOnTables(connection={}, tableName={}) - start", getDBUnitConnection(), rootTable);
         ExportedKeysSearchCallback callback = new ExportedKeysSearchCallback(getDBUnitConnection());
         DepthFirstSearch search = new DepthFirstSearch(depth);
         Set tables = search.search(new String[]{rootTable}, callback);
         return tables;
-    }
+    }*/
 
     public static void assertEquals(@NotNull IDataSet expectedDataSet, @NotNull IDataSet actualDataSet, @NotNull String table) throws Exception {
         try {
