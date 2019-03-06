@@ -16,7 +16,7 @@ public class RestUtilsTest {
             headers.put("test","header");
         }
 
-        String url = "https://data.gov.uk/api";
+        String url = "https://data.gov.uk/";
         ValidatableResponse response = RestUtils.get(url, headers);
         Assert.assertEquals(200,response.extract().statusCode());
     }
@@ -28,7 +28,7 @@ public class RestUtilsTest {
             headers.put("test","header");
         }
 
-        String url = "https://data.gov.uk/api";
+        String url = "https://data.gov.uk/";
         ValidatableResponse response = RestUtils.getWithQueryParams(url,queryParams(), headers);
         Assert.assertEquals(200,response.extract().statusCode());
     }
