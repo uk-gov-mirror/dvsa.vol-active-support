@@ -6,11 +6,13 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -21,21 +23,20 @@ public final class PrintOutputS3 {
     private static final String TIMEOUT_SECONDS_SECRET_KEY = "printOutputTimeoutSeconds";
     private static final String DEFAULT_TIMEOUT_SECONDS = "15";
     private static final Pattern PRINT_OUTPUT_FILE_NAME = Pattern.compile("\\d{8}-\\d{6}_job\\d+\\.pdf");
+    private static final DateTimeFormatter S3_DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
     private PrintOutputS3() {
     }
 
-    public static Set<String> currentPdfKeys() {
-        return listPrintOutputFiles().stream()
-                .map(PrintOutputFile::key)
-                .collect(Collectors.toSet());
-    }
+    public static PrintOutputFile waitForNonEmptyPdfForQueueId(String queueId) {
+        if (queueId == null || queueId.isBlank()) {
+            throw new IllegalArgumentException("Queue id must be present before checking print output S3");
+        }
 
-    public static PrintOutputFile waitForNewNonEmptyPdf(Set<String> existingKeys, String queueId) {
         long timeoutAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSeconds());
 
         do {
-            Optional<PrintOutputFile> matchingFile = findNewNonEmptyPdf(existingKeys, queueId);
+            Optional<PrintOutputFile> matchingFile = findNonEmptyPdfForQueueId(queueId);
             if (matchingFile.isPresent()) {
                 return matchingFile.get();
             }
@@ -44,28 +45,15 @@ public final class PrintOutputS3 {
         } while (System.currentTimeMillis() < timeoutAt);
 
         throw new AssertionError(String.format(
-                "No new non-empty print output PDF was created in s3://%s/%s within %s seconds. Queue id: %s. Existing PDF count before print: %s. Recent PDFs now: %s",
-                bucket(), prefix(), timeoutSeconds(), queueId, existingKeys.size(), recentFiles()));
+                "No non-empty print output PDF was created in s3://%s/%s for queue id %s within %s seconds. Recent PDFs now: %s",
+                bucket(), datedPrefix(), queueId, timeoutSeconds(), recentFiles()));
     }
 
-    private static Optional<PrintOutputFile> findNewNonEmptyPdf(Set<String> existingKeys, String queueId) {
-        List<PrintOutputFile> files = listPrintOutputFiles();
+    private static Optional<PrintOutputFile> findNonEmptyPdfForQueueId(String queueId) {
+        String expectedSuffix = String.format("_job%s.pdf", queueId);
 
-        if (queueId != null && !queueId.isBlank()) {
-            String expectedSuffix = String.format("_job%s.pdf", queueId);
-            Optional<PrintOutputFile> queueFile = files.stream()
-                    .filter(file -> !existingKeys.contains(file.key()))
-                    .filter(file -> file.key().endsWith(expectedSuffix))
-                    .filter(file -> file.size() > 0)
-                    .findFirst();
-
-            if (queueFile.isPresent()) {
-                return queueFile;
-            }
-        }
-
-        return files.stream()
-                .filter(file -> !existingKeys.contains(file.key()))
+        return listPrintOutputFiles().stream()
+                .filter(file -> file.key().endsWith(expectedSuffix))
                 .filter(file -> file.size() > 0)
                 .max(Comparator.comparing(PrintOutputFile::lastModified));
     }
@@ -77,7 +65,8 @@ public final class PrintOutputS3 {
         do {
             ListObjectsV2Request request = new ListObjectsV2Request()
                     .withBucketName(bucket())
-                    .withPrefix(prefix())
+                    .withPrefix(datedPrefix())
+                    .withMaxKeys(100)
                     .withContinuationToken(continuationToken);
 
             ListObjectsV2Result result = S3.client(Regions.EU_WEST_1).listObjectsV2(request);
@@ -98,6 +87,11 @@ public final class PrintOutputS3 {
 
     private static String prefix() {
         return requiredSecret(PREFIX_SECRET_KEY);
+    }
+
+    private static String datedPrefix() {
+        LocalDate today = LocalDate.now(ZoneId.of("Europe/London"));
+        return String.format("%s%s", prefix(), today.format(S3_DATE_FORMAT));
     }
 
     private static int timeoutSeconds() {
