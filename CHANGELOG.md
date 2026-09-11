@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.22.0](https://github.com/dvsa/vol-active-support/compare/v2.21.1...v2.22.0) (2026-09-11)
+
+
+### Features
+
+* print ([a9d33ad](https://github.com/dvsa/vol-active-support/commit/a9d33adbdfc8345c25497252a39e24d06afd4766))
+* print ([e88b7b8](https://github.com/dvsa/vol-active-support/commit/e88b7b85922dc15c990d3dd3747e823d7d64b566))
+
 ## [2.21.1](https://github.com/dvsa/vol-active-support/compare/v2.21.0...v2.21.1) (2026-09-10)
 
 
