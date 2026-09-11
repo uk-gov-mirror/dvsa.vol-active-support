@@ -21,7 +21,7 @@ public final class PrintOutputS3 {
     private static final String BUCKET_SECRET_KEY = "printOutputBucket";
     private static final String PREFIX_SECRET_KEY = "printOutputPrefix";
     private static final String TIMEOUT_SECONDS_SECRET_KEY = "printOutputTimeoutSeconds";
-    private static final String DEFAULT_TIMEOUT_SECONDS = "15";
+    private static final int DEFAULT_TIMEOUT_SECONDS = 4;
     private static final Pattern PRINT_OUTPUT_FILE_NAME = Pattern.compile("\\d{8}-\\d{6}_job\\d+\\.pdf");
     private static final DateTimeFormatter S3_DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
@@ -33,7 +33,8 @@ public final class PrintOutputS3 {
             throw new IllegalArgumentException("Queue id must be present before checking print output S3");
         }
 
-        long timeoutAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSeconds());
+        int timeoutSeconds = timeoutSeconds();
+        long timeoutAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSeconds);
 
         do {
             Optional<PrintOutputFile> matchingFile = findNonEmptyPdfForQueueId(queueId);
@@ -45,8 +46,8 @@ public final class PrintOutputS3 {
         } while (System.currentTimeMillis() < timeoutAt);
 
         throw new AssertionError(String.format(
-                "No non-empty print output PDF was created in s3://%s/%s for queue id %s within %s seconds. Recent PDFs now: %s",
-                bucket(), datedPrefix(), queueId, timeoutSeconds(), recentFiles()));
+                "No non-empty print output PDF was created for queue id %s within %s seconds. Recent print output PDFs now: %s",
+                queueId, timeoutSeconds, recentFiles()));
     }
 
     private static Optional<PrintOutputFile> findNonEmptyPdfForQueueId(String queueId) {
@@ -96,7 +97,15 @@ public final class PrintOutputS3 {
 
     private static int timeoutSeconds() {
         String timeout = SecretsManager.getSecretValue(TIMEOUT_SECONDS_SECRET_KEY);
-        return Integer.parseInt(timeout == null || timeout.isBlank() ? DEFAULT_TIMEOUT_SECONDS : timeout);
+        if (timeout == null || timeout.isBlank()) {
+            return DEFAULT_TIMEOUT_SECONDS;
+        }
+
+        try {
+            return Integer.parseInt(timeout.trim());
+        } catch (NumberFormatException exception) {
+            return DEFAULT_TIMEOUT_SECONDS;
+        }
     }
 
     private static String requiredSecret(String secretKey) {
