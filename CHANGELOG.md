@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.23.1](https://github.com/dvsa/vol-active-support/compare/v2.23.0...v2.23.1) (2026-09-11)
+
+
+### Bug Fixes
+
+* timeout ([830cf34](https://github.com/dvsa/vol-active-support/commit/830cf34d5f988656ba0ecf29032184e974848680))
+* timeout ([53dc5c9](https://github.com/dvsa/vol-active-support/commit/53dc5c9ef33da3328c2fbb230528ebc2ab1d8858))
+
 ## [2.23.0](https://github.com/dvsa/vol-active-support/compare/v2.22.0...v2.23.0) (2026-09-11)
 
 
