@@ -21,7 +21,7 @@ public final class PrintOutputS3 {
     private static final String BUCKET_SECRET_KEY = "printOutputBucket";
     private static final String PREFIX_SECRET_KEY = "printOutputPrefix";
     private static final String TIMEOUT_SECONDS_SECRET_KEY = "printOutputTimeoutSeconds";
-    private static final int DEFAULT_TIMEOUT_SECONDS = 4;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 60;
     private static final Pattern PRINT_OUTPUT_FILE_NAME = Pattern.compile("\\d{8}-\\d{6}_job\\d+\\.pdf");
     private static final DateTimeFormatter S3_DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
