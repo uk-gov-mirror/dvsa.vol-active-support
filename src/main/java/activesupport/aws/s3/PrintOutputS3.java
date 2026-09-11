@@ -50,11 +50,40 @@ public final class PrintOutputS3 {
                 queueId, timeoutSeconds, recentFiles()));
     }
 
+    public static PrintOutputFile waitForNonEmptyPdfCreatedAfter(Instant printRequestedAt) {
+        if (printRequestedAt == null) {
+            throw new IllegalArgumentException("Print request time must be present before checking print output S3");
+        }
+
+        int timeoutSeconds = timeoutSeconds();
+        long timeoutAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSeconds);
+
+        do {
+            Optional<PrintOutputFile> matchingFile = findNonEmptyPdfCreatedAfter(printRequestedAt);
+            if (matchingFile.isPresent()) {
+                return matchingFile.get();
+            }
+
+            sleep();
+        } while (System.currentTimeMillis() < timeoutAt);
+
+        throw new AssertionError(String.format(
+                "No non-empty print output PDF was created within %s seconds of the print request. Recent print output PDFs now: %s",
+                timeoutSeconds, recentFiles()));
+    }
+
     private static Optional<PrintOutputFile> findNonEmptyPdfForQueueId(String queueId) {
         String expectedSuffix = String.format("_job%s.pdf", queueId);
 
         return listPrintOutputFiles().stream()
                 .filter(file -> file.key().endsWith(expectedSuffix))
+                .filter(file -> file.size() > 0)
+                .max(Comparator.comparing(PrintOutputFile::lastModified));
+    }
+
+    private static Optional<PrintOutputFile> findNonEmptyPdfCreatedAfter(Instant printRequestedAt) {
+        return listPrintOutputFiles().stream()
+                .filter(file -> !file.lastModified().isBefore(printRequestedAt))
                 .filter(file -> file.size() > 0)
                 .max(Comparator.comparing(PrintOutputFile::lastModified));
     }
