@@ -363,7 +363,7 @@
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <version>3.2.2</version>
         </dependency>
 
         <!-- Jackson Annotations -->
