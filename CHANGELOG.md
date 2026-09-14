@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.23.2](https://github.com/dvsa/vol-active-support/compare/v2.23.1...v2.23.2) (2026-09-14)
+
+
+### Bug Fixes
+
+* jackson ([5cf62cd](https://github.com/dvsa/vol-active-support/commit/5cf62cddbb82c590260f40af26d2fe5eb1071f79))
+* jackson ([baade7c](https://github.com/dvsa/vol-active-support/commit/baade7cf283399b54630caaadec9751cf38179a5))
+* jackson ([2e5085c](https://github.com/dvsa/vol-active-support/commit/2e5085c590aaccaa742f7e34abe4585b4f6e5747))
+* jackson ([426a549](https://github.com/dvsa/vol-active-support/commit/426a5490d47a00ac45962300625c7aaf1fa2fe5e))
+
 ## [2.23.1](https://github.com/dvsa/vol-active-support/compare/v2.23.0...v2.23.1) (2026-09-11)
 
 
