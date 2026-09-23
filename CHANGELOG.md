@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.23.5](https://github.com/dvsa/vol-active-support/compare/v2.23.4...v2.23.5) (2026-09-23)
+
+
+### Bug Fixes
+
+* edge ([7f2b9a4](https://github.com/dvsa/vol-active-support/commit/7f2b9a41f657138c82d0853fe6fbecc71b32f906))
+
 ## [2.23.4](https://github.com/dvsa/vol-active-support/compare/v2.23.3...v2.23.4) (2026-09-23)
 
 
