@@ -55,6 +55,8 @@ public class EdgeSetUp {
         edgeOptions.addArguments("--no-default-browser-check");
         edgeOptions.addArguments("--disable-search-engine-choice-screen");
         edgeOptions.addArguments("--disable-popup-blocking");
+        edgeOptions.setAcceptInsecureCerts(true);
+        edgeOptions.setEnableDownloads(true);
 
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("net.network_prediction_options", 2);
