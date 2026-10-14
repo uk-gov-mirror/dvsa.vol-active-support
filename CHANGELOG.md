@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.23.8](https://github.com/dvsa/vol-active-support/compare/v2.23.7...v2.23.8) (2026-10-14)
+
+
+### Bug Fixes
+
+* guava ([b1c0e01](https://github.com/dvsa/vol-active-support/commit/b1c0e01d4d85dbb2d2303f771c1377eea7519b50))
+* guava ([bb86fb8](https://github.com/dvsa/vol-active-support/commit/bb86fb8f41e33011190eb1fe74cb83caab42cbe7))
+
 ## [2.23.7](https://github.com/dvsa/vol-active-support/compare/v2.23.6...v2.23.7) (2026-09-28)
 
 
