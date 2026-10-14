@@ -65,7 +65,7 @@
         <totp.version>1.0</totp.version>
 
         <!-- Utilities -->
-        <guava.version>32.1.2-jre</guava.version>
+        <guava.version>33.7.2-jre</guava.version>
         <annotations.version>24.0.1</annotations.version>
         <typesafe-config.version>1.4.3</typesafe-config.version>
         <jsch.version>0.1.55</jsch.version>
