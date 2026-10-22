@@ -1,5 +1,6 @@
 package activesupport.driver.Parallel;
 
+import activesupport.proxy.JumpboxProxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -31,6 +32,7 @@ public class FirefoxSetUp {
             options.addArguments("-headless");
         }
         if (getPlatform() == null) {
+            JumpboxProxy.applyTo(options);
             driver = new FirefoxDriver(getOptions());
         } else {
             options.setPlatformName(getPlatform());

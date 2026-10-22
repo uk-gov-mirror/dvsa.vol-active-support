@@ -1,5 +1,6 @@
 package activesupport.driver.Parallel;
 
+import activesupport.proxy.JumpboxProxy;
 import activesupport.proxy.ProxyConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -69,6 +70,7 @@ public class EdgeSetUp {
 
         WebDriver driver;
         if (getBrowserVersion() == null) {
+            JumpboxProxy.applyTo(edgeOptions);
             driver = new EdgeDriver(edgeOptions);
         } else {
             edgeOptions.setPlatformName(getPlatform());
