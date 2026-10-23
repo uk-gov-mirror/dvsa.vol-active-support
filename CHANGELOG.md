@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.24.0](https://github.com/dvsa/vol-active-support/compare/v2.23.8...v2.24.0) (2026-10-23)
+
+
+### Features
+
+* route local runs through jumpbox-proxy when it is running ([e2dc36d](https://github.com/dvsa/vol-active-support/commit/e2dc36d72afc6832c028c46f5bfdb011120b46e1))
+* route local runs through jumpbox-proxy when it is running ([9ef0026](https://github.com/dvsa/vol-active-support/commit/9ef0026cab29901fe4cad4b29a76f4303be2265e))
+
 ## [2.23.8](https://github.com/dvsa/vol-active-support/compare/v2.23.7...v2.23.8) (2026-10-14)
 
 
