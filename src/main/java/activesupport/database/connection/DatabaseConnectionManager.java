@@ -3,6 +3,7 @@ package activesupport.database.connection;
 import activesupport.aws.s3.SecretsManager;
 import activesupport.database.Driver;
 import activesupport.database.exception.UnsupportedDatabaseDriverException;
+import activesupport.proxy.JumpboxProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,15 @@ public class DatabaseConnectionManager {
             
             String dbUrl = buildDatabaseUrl(environment);
             LOGGER.debug("Connecting to database: {}", maskUrl(dbUrl));
-            
+
+            // Through the jumpbox each environment uses its own login; the shared
+            // test runner login only works for QA.
+            JumpboxDatabaseLogin login = JumpboxProxy.enableIfRunning()
+                    ? JumpboxDatabaseLogin.forEnvironment(environment, System.getProperties(), SecretsManager::getSecretValue)
+                    : null;
+            if (login != null) {
+                return DriverManager.getConnection(dbUrl, login.username(), login.password());
+            }
             return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
             
         } catch (Exception e) {
@@ -107,22 +116,7 @@ public class DatabaseConnectionManager {
      * @return Complete JDBC URL
      */
     public static String buildDatabaseUrl(String environment) {
-        String baseParams = "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true";
-        
-        return switch (environment.toLowerCase().trim()) {
-            case "qa", "qualityassurance" ->
-                    "jdbc:mysql://olcsdb-rds.qa.olcs.dev-dvsacloud.uk:3306/OLCS_RDS_OLCSDB" + baseParams;
-            case "int", "integration" ->
-                    "jdbc:mysql://olcsdb-rds.int.olcs.dev-dvsacloud.uk:3306/OLCS_RDS_OLCSDB" + baseParams;
-            case "prep", "preproduction" ->
-                    "jdbc:mysql://olcsdb-rds.prep.olcs.dev-dvsacloud.uk:3306/OLCS_RDS_OLCSDB" + baseParams;
-            case "local", "localhost" ->
-                    "jdbc:mysql://localhost:3306/OLCS_RDS_OLCSDB" + baseParams;
-            default -> {
-                LOGGER.warn("Unknown environment '{}'. Defaulting to QA", environment);
-                yield "jdbc:mysql://olcsdb-rds.qa.olcs.dev-dvsacloud.uk:3306/OLCS_RDS_OLCSDB" + baseParams;
-            }
-        };
+        return DatabaseUrl.forEnvironment(environment, JumpboxProxy.enableIfRunning());
     }
     
     /**

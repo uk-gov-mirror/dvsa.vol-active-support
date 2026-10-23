@@ -24,6 +24,7 @@
         <selenium.version>4.47.0</selenium.version>
         <rest-assured.version>5.4.0</rest-assured.version>
         <junit.version>5.11.3</junit.version>
+        <junit-platform.version>1.11.3</junit-platform.version>
         <mockito.version>5.8.0</mockito.version>
         <wiremock.version>3.13.1</wiremock.version>
 
@@ -112,6 +113,10 @@
                 <version>${maven.surefire.version}</version>
                 <configuration>
                     <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+                    <systemPropertyVariables>
+                        <!-- Keep a locally running jumpbox-proxy out of these tests -->
+                        <jumpbox.proxy>off</jumpbox.proxy>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -279,6 +284,19 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- For JumpboxProxyListener; test runners already provide it -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit-platform.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Selenium WebDriver -->

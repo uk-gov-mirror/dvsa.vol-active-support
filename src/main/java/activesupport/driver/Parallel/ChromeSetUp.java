@@ -1,5 +1,6 @@
 package activesupport.driver.Parallel;
 
+import activesupport.proxy.JumpboxProxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -39,6 +40,7 @@ public class ChromeSetUp {
 
         WebDriver driver;
         if (getBrowserVersion() == null) {
+            JumpboxProxy.applyTo(chromeOptions);
             driver = new ChromeDriver(chromeOptions);
         } else {
             chromeOptions.setPlatformName(getPlatform());
